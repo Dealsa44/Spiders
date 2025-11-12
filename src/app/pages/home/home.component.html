@@ -1,0 +1,321 @@
+<!-- Home Page - Unique Non-Linear Layout -->
+<main class="home-page">
+  <!-- Floating Background Elements -->
+  <div class="floating-elements">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+    <div class="floating-shape shape-5"></div>
+  </div>
+
+  <!-- Hero Section with Overlapping Elements -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="gradient-orb orb-3"></div>
+    </div>
+    <div class="hero-content">
+      <span class="hero-badge" data-animate="fade-up">{{ getText('heroBadge') }}</span>
+      <h1 class="hero-title" data-animate="fade-up" data-delay="0.1">
+        <span class="title-line">{{ getText('heroTitle') }}</span>
+      </h1>
+      <p class="hero-subtitle" data-animate="fade-up" data-delay="0.2">{{ getText('heroSubtitle') }}</p>
+      <div class="hero-buttons" data-animate="fade-up" data-delay="0.3">
+        <a [routerLink]="getRoute('/contact')" class="btn-primary-large">
+          <span>{{ getText('heroButton') }}</span>
+          <div class="btn-ripple"></div>
+        </a>
+        <a [routerLink]="getRoute('/portfolio')" class="btn-secondary">
+          <span>{{ getText('heroButtonSecondary') }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual" data-parallax="0.5">
+      <div class="geometric-shape"></div>
+    </div>
+  </section>
+
+  <!-- Stats Section - Big, Bold, Smooth -->
+  <section class="stats-section" data-scroll-section>
+    <div class="stats-background">
+      <div class="stats-blob blob-1"></div>
+      <div class="stats-blob blob-2"></div>
+    </div>
+    <div class="stats-showcase">
+      <div class="stat-item" data-index="0" data-scroll-reveal>
+        <div class="stat-visual">
+          <div class="stat-icon-big">🚀</div>
+          <div class="stat-glow"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number-big" [attr.data-value]="getText('stat1Number')">{{ getText('stat1Number') }}</div>
+          <div class="stat-label-big">{{ getText('stat1Label') }}</div>
+        </div>
+      </div>
+      <div class="stat-item" data-index="1" data-scroll-reveal>
+        <div class="stat-visual">
+          <div class="stat-icon-big">⭐</div>
+          <div class="stat-glow"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number-big" [attr.data-value]="getText('stat2Number')">{{ getText('stat2Number') }}</div>
+          <div class="stat-label-big">{{ getText('stat2Label') }}</div>
+        </div>
+      </div>
+      <div class="stat-item" data-index="2" data-scroll-reveal>
+        <div class="stat-visual">
+          <div class="stat-icon-big">💼</div>
+          <div class="stat-glow"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number-big" [attr.data-value]="getText('stat3Number')">{{ getText('stat3Number') }}</div>
+          <div class="stat-label-big">{{ getText('stat3Label') }}</div>
+        </div>
+      </div>
+      <div class="stat-item" data-index="3" data-scroll-reveal>
+        <div class="stat-visual">
+          <div class="stat-icon-big">🎯</div>
+          <div class="stat-glow"></div>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number-big" [attr.data-value]="getText('stat4Number')">{{ getText('stat4Number') }}</div>
+          <div class="stat-label-big">{{ getText('stat4Label') }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section - Big, Bold, Beautiful Scroll Animations -->
+  <section class="features-section" data-scroll-section>
+    <div class="features-background">
+      <div class="big-morphing-blob blob-1"></div>
+      <div class="big-morphing-blob blob-2"></div>
+    </div>
+    
+    <div class="section-header" data-scroll-reveal>
+      <h2 class="big-title">{{ getText('featuresTitle') }}</h2>
+      <p class="big-subtitle">{{ getText('featuresSubtitle') }}</p>
+    </div>
+    
+    <div class="features-showcase">
+      <div class="feature-item" data-index="0" data-scroll-reveal>
+        <div class="feature-number">01</div>
+        <div class="feature-visual">
+          <div class="big-icon">🎨</div>
+          <div class="icon-glow"></div>
+        </div>
+        <div class="feature-text">
+          <h3 class="big-feature-title">{{ getText('feature1Title') }}</h3>
+          <p class="big-feature-description">{{ getText('feature1Description') }}</p>
+        </div>
+      </div>
+      
+      <div class="feature-item" data-index="1" data-scroll-reveal>
+        <div class="feature-number">02</div>
+        <div class="feature-visual">
+          <div class="big-icon">⚡</div>
+          <div class="icon-glow"></div>
+        </div>
+        <div class="feature-text">
+          <h3 class="big-feature-title">{{ getText('feature2Title') }}</h3>
+          <p class="big-feature-description">{{ getText('feature2Description') }}</p>
+        </div>
+      </div>
+      
+      <div class="feature-item" data-index="2" data-scroll-reveal>
+        <div class="feature-number">03</div>
+        <div class="feature-visual">
+          <div class="big-icon">🔍</div>
+          <div class="icon-glow"></div>
+        </div>
+        <div class="feature-text">
+          <h3 class="big-feature-title">{{ getText('feature3Title') }}</h3>
+          <p class="big-feature-description">{{ getText('feature3Description') }}</p>
+        </div>
+      </div>
+      
+      <div class="feature-item" data-index="3" data-scroll-reveal>
+        <div class="feature-number">04</div>
+        <div class="feature-visual">
+          <div class="big-icon">💬</div>
+          <div class="icon-glow"></div>
+        </div>
+        <div class="feature-text">
+          <h3 class="big-feature-title">{{ getText('feature4Title') }}</h3>
+          <p class="big-feature-description">{{ getText('feature4Description') }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Preview - Big, Bold, Beautiful -->
+  <section class="projects-preview-section" data-scroll-section>
+    <div class="projects-background">
+      <div class="projects-blob blob-1"></div>
+      <div class="projects-blob blob-2"></div>
+    </div>
+    
+    <div class="section-header" data-scroll-reveal>
+      <h2 class="big-title">{{ getText('projectsTitle') }}</h2>
+      <p class="big-subtitle">{{ getText('projectsSubtitle') }}</p>
+    </div>
+    
+    <div class="projects-showcase">
+      <div class="project-card" data-index="0" data-scroll-reveal>
+        <div class="project-number">01</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" [style.background-image]="'url(' + projectImages[0] + ')'">
+            <div class="image-overlay"></div>
+            <div class="project-shine"></div>
+          </div>
+          <div class="project-glow"></div>
+        </div>
+        <div class="project-content">
+          <span class="project-category">{{ getText('project1Category') }}</span>
+          <h3 class="project-title-big">{{ getText('project1Title') }}</h3>
+          <p class="project-description-big">{{ getText('project1Description') }}</p>
+          <a [routerLink]="getRoute('/portfolio')" class="project-link-big">
+            <span>{{ getText('viewProject') }}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <div class="project-card" data-index="1" data-scroll-reveal>
+        <div class="project-number">02</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" [style.background-image]="'url(' + projectImages[1] + ')'">
+            <div class="image-overlay"></div>
+            <div class="project-shine"></div>
+          </div>
+          <div class="project-glow"></div>
+        </div>
+        <div class="project-content">
+          <span class="project-category">{{ getText('project2Category') }}</span>
+          <h3 class="project-title-big">{{ getText('project2Title') }}</h3>
+          <p class="project-description-big">{{ getText('project2Description') }}</p>
+          <a [routerLink]="getRoute('/portfolio')" class="project-link-big">
+            <span>{{ getText('viewProject') }}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <div class="project-card" data-index="2" data-scroll-reveal>
+        <div class="project-number">03</div>
+        <div class="project-image-wrapper">
+          <div class="project-image" [style.background-image]="'url(' + projectImages[2] + ')'">
+            <div class="image-overlay"></div>
+            <div class="project-shine"></div>
+          </div>
+          <div class="project-glow"></div>
+        </div>
+        <div class="project-content">
+          <span class="project-category">{{ getText('project3Category') }}</span>
+          <h3 class="project-title-big">{{ getText('project3Title') }}</h3>
+          <p class="project-description-big">{{ getText('project3Description') }}</p>
+          <a [routerLink]="getRoute('/portfolio')" class="project-link-big">
+            <span>{{ getText('viewProject') }}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="projects-cta" data-scroll-reveal>
+      <a [routerLink]="getRoute('/portfolio')" class="btn-primary-large">
+        <span>{{ getText('viewAllProjects') }}</span>
+        <div class="btn-ripple"></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Testimonials - Big, Bold, Beautiful -->
+  <section class="testimonials-section" data-scroll-section>
+    <div class="testimonials-background">
+      <div class="testimonials-blob blob-1"></div>
+      <div class="testimonials-blob blob-2"></div>
+    </div>
+    
+    <div class="section-header" data-scroll-reveal>
+      <h2 class="big-title">{{ getText('testimonialsTitle') }}</h2>
+      <p class="big-subtitle">{{ getText('testimonialsSubtitle') }}</p>
+    </div>
+    
+    <div class="testimonials-showcase">
+      <div class="testimonial-card" data-index="0" data-scroll-reveal>
+        <div class="testimonial-number">01</div>
+        <div class="testimonial-quote">
+          <div class="quote-icon-big">"</div>
+          <p class="testimonial-text-big">{{ getText('testimonial1Quote') }}</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar-big">SJ</div>
+          <div class="author-info">
+            <div class="author-name-big">{{ getText('testimonial1Author') }}</div>
+            <div class="author-role-big">{{ getText('testimonial1Role') }}</div>
+          </div>
+        </div>
+        <div class="testimonial-glow"></div>
+        <div class="testimonial-particles">
+          <div class="testimonial-particle"></div>
+          <div class="testimonial-particle"></div>
+          <div class="testimonial-particle"></div>
+        </div>
+      </div>
+      
+      <div class="testimonial-card" data-index="1" data-scroll-reveal>
+        <div class="testimonial-number">02</div>
+        <div class="testimonial-quote">
+          <div class="quote-icon-big">"</div>
+          <p class="testimonial-text-big">{{ getText('testimonial2Quote') }}</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar-big">MC</div>
+          <div class="author-info">
+            <div class="author-name-big">{{ getText('testimonial2Author') }}</div>
+            <div class="author-role-big">{{ getText('testimonial2Role') }}</div>
+          </div>
+        </div>
+        <div class="testimonial-glow"></div>
+        <div class="testimonial-particles">
+          <div class="testimonial-particle"></div>
+          <div class="testimonial-particle"></div>
+          <div class="testimonial-particle"></div>
+        </div>
+      </div>
+      
+      <div class="testimonial-card" data-index="2" data-scroll-reveal>
+        <div class="testimonial-number">03</div>
+        <div class="testimonial-quote">
+          <div class="quote-icon-big">"</div>
+          <p class="testimonial-text-big">{{ getText('testimonial3Quote') }}</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar-big">ER</div>
+          <div class="author-info">
+            <div class="author-name-big">{{ getText('testimonial3Author') }}</div>
+            <div class="author-role-big">{{ getText('testimonial3Role') }}</div>
+          </div>
+        </div>
+        <div class="testimonial-glow"></div>
+        <div class="testimonial-particles">
+          <div class="testimonial-particle"></div>
+          <div class="testimonial-particle"></div>
+          <div class="testimonial-particle"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <app-cta pageType="home"></app-cta>
+</main>

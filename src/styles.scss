@@ -1,1 +1,188 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Color Palette - Premium Tech Blue Theme */
+
+:root {
+  /* Primary Colors - Deep Navy for trust and professionalism */
+  --color-primary: #0A192F;
+  --color-primary-dark: #050A17;
+  --color-primary-light: #172A45;
+  
+  /* Secondary Colors - Electric Blue for innovation and tech-forward feel */
+  --color-secondary: #00D9FF;
+  --color-secondary-dark: #00B4D8;
+  --color-secondary-light: #33E0FF;
+  --color-secondary-transparent: rgba(0, 217, 255, 0.1);
+  
+  /* Accent Colors - Gold/Amber for premium feel and success */
+  --color-accent: #FFB800;
+  --color-accent-dark: #E6A500;
+  --color-accent-light: #FFC633;
+  --color-accent-transparent: rgba(255, 184, 0, 0.1);
+  
+  /* Neutral Colors */
+  --color-white: #FFFFFF;
+  --color-off-white: #F8F9FA;
+  --color-light-gray: #E5E7EB;
+  --color-gray: #9CA3AF;
+  --color-dark-gray: #4B5563;
+  --color-text-primary: #1F2937;
+  --color-text-secondary: #6B7280;
+  --color-text-light: #FFFFFF;
+  
+  /* Semantic Colors */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+  
+  /* Background Colors */
+  --bg-primary: var(--color-white);
+  --bg-secondary: var(--color-off-white);
+  --bg-dark: var(--color-primary);
+  --bg-gradient: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  --bg-gradient-accent: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+  
+  /* Border Colors */
+  --border-color: var(--color-light-gray);
+  --border-color-dark: var(--color-gray);
+  
+  /* Shadow Colors */
+  --shadow-sm: 0 1px 2px 0 rgba(10, 25, 47, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(10, 25, 47, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(10, 25, 47, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(10, 25, 47, 0.1);
+  --shadow-glow: 0 0 20px rgba(0, 217, 255, 0.3);
+  --shadow-glow-accent: 0 0 20px rgba(255, 184, 0, 0.3);
+  
+  /* Typography */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  color: var(--color-text-primary);
+  background-color: var(--bg-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+h2 {
+  font-size: 2.25rem;
+}
+
+h3 {
+  font-size: 1.875rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-secondary);
+}
+
+a {
+  color: var(--color-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-secondary-dark);
+}
+
+/* Utility Classes */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.25rem;
+  }
+  
+  h2 {
+    font-size: 1.875rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+}

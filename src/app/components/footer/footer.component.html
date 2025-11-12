@@ -1,0 +1,32 @@
+<footer class="footer">
+  <div class="footer-content">
+    <!-- Company Info Section -->
+    <div class="footer-section">
+      <h3>{{ getText('companyName') }}</h3>
+      <p>{{ getText('companyDescription') }}</p>
+    </div>
+
+    <!-- Address Section -->
+    <div class="footer-section">
+      <h4>{{ getText('address') }}</h4>
+      <p>{{ getText('addressValue') }}</p>
+    </div>
+
+    <!-- Phone Section -->
+    <div class="footer-section">
+      <h4>{{ getText('phone') }}</h4>
+      <p><a [href]="'tel:' + getText('phoneValue')">{{ getText('phoneValue') }}</a></p>
+    </div>
+
+    <!-- Email Section -->
+    <div class="footer-section">
+      <h4>{{ getText('email') }}</h4>
+      <p><a [href]="'mailto:' + getText('emailValue')">{{ getText('emailValue') }}</a></p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>{{ getText('copyright') }}</p>
+  </div>
+</footer>
+

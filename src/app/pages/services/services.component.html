@@ -1,0 +1,30 @@
+<!-- Services Page -->
+<main class="services-page">
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="header-content">
+      <h1>{{ getText('pageTitle') }}</h1>
+      <p>{{ getText('pageSubtitle') }}</p>
+    </div>
+  </section>
+
+  <!-- Services List -->
+  <section class="services-list">
+    <div *ngFor="let service of serviceItems; let i = index" class="service-item" [attr.data-index]="i">
+      <div class="service-icon-wrapper">
+        <div class="service-icon">{{ service.icon }}</div>
+      </div>
+      <h3>{{ getServiceText(service, 'title') }}</h3>
+      <p class="service-description">{{ getServiceText(service, 'description') }}</p>
+      <ul class="service-features">
+        <li *ngFor="let feature of service.features">
+          <span class="feature-check">✓</span>
+          <span>{{ getFeatureText(feature) }}</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <app-cta pageType="services"></app-cta>
+</main>

@@ -1,0 +1,128 @@
+<!-- Contact Page -->
+<main class="contact-page">
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="header-content">
+      <h1>{{ getText('pageTitle') }}</h1>
+      <p>{{ getText('pageSubtitle') }}</p>
+    </div>
+  </section>
+
+  <div class="contact-content">
+    <!-- Contact Form -->
+    <section class="contact-form-section">
+      <div class="form-header">
+        <div class="form-icon">✉️</div>
+        <h2>{{ getText('formTitle') }}</h2>
+      </div>
+      <form (ngSubmit)="onSubmit()" #contactFormRef="ngForm">
+        <div class="form-group">
+          <label>{{ getText('nameLabel') }}</label>
+          <input
+            type="text"
+            [(ngModel)]="contactForm.name"
+            [placeholder]="getText('namePlaceholder')"
+            name="name"
+            #nameInput="ngModel"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>{{ getText('emailLabel') }}</label>
+          <input
+            type="email"
+            [(ngModel)]="contactForm.email"
+            [placeholder]="getText('emailPlaceholder')"
+            name="email"
+            #emailInput="ngModel"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>{{ getText('phoneLabel') }}</label>
+          <input
+            type="tel"
+            [(ngModel)]="contactForm.phone"
+            [placeholder]="getText('phonePlaceholder')"
+            name="phone"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>{{ getText('messageLabel') }}</label>
+          <textarea
+            [(ngModel)]="contactForm.message"
+            [placeholder]="getText('messagePlaceholder')"
+            name="message"
+            #messageInput="ngModel"
+            rows="6"
+            required
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="isSubmitting" class="submit-button">
+            <span *ngIf="!isSubmitting">{{ getText('submitButton') }}</span>
+            <span *ngIf="isSubmitting">{{ getText('submittingButton') }}</span>
+          </button>
+          <div *ngIf="submitMessage" class="submit-message" [class.success]="submitSuccess" [class.error]="!submitSuccess">
+            {{ submitMessage }}
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Contact Info -->
+    <section class="contact-info-section">
+      <div class="info-header">
+        <div class="info-icon">📍</div>
+        <h2>{{ getText('contactInfoTitle') }}</h2>
+      </div>
+      
+      <div class="info-items">
+        <div class="info-item">
+          <div class="info-icon-small">🏢</div>
+          <div class="info-content">
+            <h4>{{ getText('addressLabel') }}</h4>
+            <p>{{ getText('addressValue') }}</p>
+            <p>{{ getText('cityValue') }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-small">📞</div>
+          <div class="info-content">
+            <h4>{{ getText('phone') }}</h4>
+            <p><a [href]="'tel:' + getText('phoneValue')">{{ getText('phoneValue') }}</a></p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-small">✉️</div>
+          <div class="info-content">
+            <h4>{{ getText('email') }}</h4>
+            <p><a [href]="'mailto:' + getText('emailValue')">{{ getText('emailValue') }}</a></p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon-small">🕐</div>
+          <div class="info-content">
+            <h4>{{ getText('hoursLabel') }}</h4>
+            <p>{{ getText('hoursValue') }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="social-section">
+        <h4>{{ getText('followUs') }}</h4>
+        <p class="social-description">{{ getText('socialDescription') }}</p>
+        <div class="social-links">
+          <!-- Social media links placeholder - can be added later -->
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

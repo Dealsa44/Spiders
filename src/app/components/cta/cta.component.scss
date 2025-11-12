@@ -1,0 +1,157 @@
+// ============================================
+// CTA SECTION - Animated Background
+// ============================================
+.cta-section {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  padding-bottom: var(--spacing-3xl);
+  background: var(--bg-gradient);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  margin-bottom: 0;
+  
+  @media (max-width: 768px) {
+    padding: var(--spacing-2xl) var(--spacing-md);
+    padding-bottom: var(--spacing-2xl);
+  }
+}
+
+.cta-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.cta-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 184, 0, 0.15) 0%, transparent 60%);
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+.cta-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--color-secondary);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: particle-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &[data-animate].visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+    letter-spacing: -1px;
+    
+    @media (max-width: 768px) {
+      font-size: 2.25rem;
+    }
+  }
+  
+  p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.7;
+  }
+}
+
+// ============================================
+// BUTTONS - Enhanced with Ripple
+// ============================================
+.btn-primary-large {
+  padding: var(--spacing-lg) var(--spacing-3xl);
+  background: var(--bg-gradient-accent);
+  color: var(--color-primary);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(255, 184, 0, 0.3);
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  will-change: transform;
+  
+  span {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .btn-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  &:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(255, 184, 0, 0.4);
+    filter: brightness(1.1);
+    
+    .btn-ripple {
+      width: 300px;
+      height: 300px;
+    }
+  }
+  
+  &:active {
+    transform: translateY(-1px) scale(1);
+  }
+}
+
+// ============================================
+// ANIMATIONS
+// ============================================
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+  50% { transform: translateY(-30px) translateX(20px); opacity: 1; }
+}
+

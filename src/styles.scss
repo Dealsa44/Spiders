@@ -1,22 +1,31 @@
-/* Global Color Palette - Premium Tech Blue Theme */
+/* Global Color Palette - Dark Purple Elegant Theme */
 
 :root {
-  /* Primary Colors - Deep Navy for trust and professionalism */
-  --color-primary: #0A192F;
-  --color-primary-dark: #050A17;
-  --color-primary-light: #172A45;
+  /* Primary Colors - Deep Purple/Black for elegance and sophistication */
+  --color-primary: #0A0A0A;
+  --color-primary-dark: #000000;
+  --color-primary-light: #1A1A1A;
   
-  /* Secondary Colors - Electric Blue for innovation and tech-forward feel */
-  --color-secondary: #00D9FF;
-  --color-secondary-dark: #00B4D8;
-  --color-secondary-light: #33E0FF;
-  --color-secondary-transparent: rgba(0, 217, 255, 0.1);
+  /* Secondary Colors - Purple gradients for modern tech feel */
+  --color-secondary: #8B5CF6;
+  --color-secondary-dark: #6D28D9;
+  --color-secondary-light: #A78BFA;
+  --color-secondary-transparent: rgba(139, 92, 246, 0.1);
   
-  /* Accent Colors - Gold/Amber for premium feel and success */
-  --color-accent: #FFB800;
-  --color-accent-dark: #E6A500;
-  --color-accent-light: #FFC633;
-  --color-accent-transparent: rgba(255, 184, 0, 0.1);
+  /* Accent Colors - Pink/Purple gradients for premium feel */
+  --color-accent: #EC4899;
+  --color-accent-dark: #DB2777;
+  --color-accent-light: #F472B6;
+  --color-accent-transparent: rgba(236, 72, 153, 0.1);
+  
+  /* Purple gradient colors */
+  --color-purple-1: #8B5CF6;
+  --color-purple-2: #A78BFA;
+  --color-purple-3: #C4B5FD;
+  --color-pink-1: #EC4899;
+  --color-pink-2: #F472B6;
+  --color-blue-1: #3B82F6;
+  --color-blue-2: #60A5FA;
   
   /* Neutral Colors */
   --color-white: #FFFFFF;
@@ -35,11 +44,13 @@
   --color-info: #3B82F6;
   
   /* Background Colors */
-  --bg-primary: var(--color-white);
-  --bg-secondary: var(--color-off-white);
-  --bg-dark: var(--color-primary);
-  --bg-gradient: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  --bg-primary: var(--color-primary);
+  --bg-secondary: var(--color-primary-light);
+  --bg-dark: var(--color-primary-dark);
+  --bg-gradient: linear-gradient(135deg, var(--color-primary) 0%, #1A0A2E 100%);
   --bg-gradient-accent: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+  --bg-gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  --bg-gradient-blue-purple: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
   
   /* Border Colors */
   --border-color: var(--color-light-gray);
@@ -92,11 +103,12 @@ html {
 
 body {
   font-family: var(--font-family-primary);
-  color: var(--color-text-primary);
+  color: var(--color-text-light);
   background-color: var(--bg-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* Typography */
@@ -104,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-heading);
   font-weight: 700;
   line-height: 1.2;
-  color: var(--color-text-primary);
+  color: var(--color-text-light);
 }
 
 h1 {
@@ -134,7 +146,8 @@ h6 {
 
 p {
   margin-bottom: var(--spacing-md);
-  color: var(--color-text-secondary);
+  color: var(--color-text-light);
+  opacity: 0.9;
 }
 
 a {

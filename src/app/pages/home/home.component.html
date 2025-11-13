@@ -1,321 +1,263 @@
-<!-- Home Page - Unique Non-Linear Layout -->
-<main class="home-page">
-  <!-- Floating Background Elements -->
-  <div class="floating-elements">
-    <div class="floating-shape shape-1"></div>
-    <div class="floating-shape shape-2"></div>
-    <div class="floating-shape shape-3"></div>
-    <div class="floating-shape shape-4"></div>
-    <div class="floating-shape shape-5"></div>
+<!-- One-Page Portfolio Website -->
+<main class="one-page-portfolio">
+  <!-- Navigation Bar -->
+  <nav class="navbar" [class.navbar-fixed]="isNavbarFixed" [style.transform]="navbarTransform">
+    <div class="navbar-content">
+      <div class="logo">
+        <span class="logo-x">S</span>
+        <span class="logo-text">PIDERS</span>
+      </div>
+      <div class="nav-links">
+        <a href="#services" (click)="scrollToSection('services', $event)">Services</a>
+        <a href="#about" (click)="scrollToSection('about', $event)">About</a>
+        <a href="#portfolio" (click)="scrollToSection('portfolio', $event)">Portfolio</a>
+        <a href="#processes" (click)="scrollToSection('processes', $event)">Processes</a>
+        <a href="#stats" (click)="scrollToSection('stats', $event)">Stats</a>
+      </div>
+      <a routerLink="/contact" class="contact-btn">
+        Contact us
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
   </div>
+  </nav>
 
-  <!-- Hero Section with Overlapping Elements -->
-  <section class="hero-section">
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero">
     <div class="hero-background">
-      <div class="gradient-orb orb-1"></div>
-      <div class="gradient-orb orb-2"></div>
-      <div class="gradient-orb orb-3"></div>
+      <div class="gradient-blob blob-1"></div>
+      <div class="gradient-blob blob-2"></div>
     </div>
     <div class="hero-content">
-      <span class="hero-badge" data-animate="fade-up">{{ getText('heroBadge') }}</span>
-      <h1 class="hero-title" data-animate="fade-up" data-delay="0.1">
-        <span class="title-line">{{ getText('heroTitle') }}</span>
+      <div class="hero-text-left">
+        <h1 class="hero-title">
+          <span class="title-line-1">Web Design & Development</span>
+          <span class="title-line-2">for Modern Businesses</span>
       </h1>
-      <p class="hero-subtitle" data-animate="fade-up" data-delay="0.2">{{ getText('heroSubtitle') }}</p>
-      <div class="hero-buttons" data-animate="fade-up" data-delay="0.3">
-        <a [routerLink]="getRoute('/contact')" class="btn-primary-large">
-          <span>{{ getText('heroButton') }}</span>
-          <div class="btn-ripple"></div>
-        </a>
-        <a [routerLink]="getRoute('/portfolio')" class="btn-secondary">
-          <span>{{ getText('heroButtonSecondary') }}</span>
-        </a>
+      </div>
+      <div class="hero-text-right">
+        <p class="hero-description">
+          Professional web development services. From responsive websites to full-stack applications. 
+          We create digital experiences that drive results and elevate your online presence.
+        </p>
       </div>
     </div>
-    <div class="hero-visual" data-parallax="0.5">
-      <div class="geometric-shape"></div>
+    <div class="hero-visual">
+      <div class="geometric-shape shape-1"></div>
+      <div class="geometric-shape shape-2"></div>
     </div>
   </section>
 
-  <!-- Stats Section - Big, Bold, Smooth -->
-  <section class="stats-section" data-scroll-section>
-    <div class="stats-background">
-      <div class="stats-blob blob-1"></div>
-      <div class="stats-blob blob-2"></div>
+  <!-- Services Section -->
+  <section class="services-section" id="services" [class.services-fixed]="isServicesFixed">
+    <div class="services-background"></div>
+    <div class="services-content" [class.fixed-content]="isServicesFixed" [class.scrolling-up]="isScrollingUpServices" [style.transform]="servicesContentTransform">
+      <h2 class="section-title">SERVICES</h2>
+      <div class="services-display">
+        <div class="service-item" *ngFor="let service of services; let i = index" 
+             [class.active]="i === currentServiceIndex">
+          <div class="service-icon">
+            <div class="icon-3d" [innerHTML]="service.icon"></div>
     </div>
-    <div class="stats-showcase">
-      <div class="stat-item" data-index="0" data-scroll-reveal>
-        <div class="stat-visual">
-          <div class="stat-icon-big">🚀</div>
-          <div class="stat-glow"></div>
+          <div class="service-info">
+            <h3 class="service-name">{{ service.name }}</h3>
+            <p class="service-description">{{ service.description }}</p>
         </div>
-        <div class="stat-content">
-          <div class="stat-number-big" [attr.data-value]="getText('stat1Number')">{{ getText('stat1Number') }}</div>
-          <div class="stat-label-big">{{ getText('stat1Label') }}</div>
-        </div>
-      </div>
-      <div class="stat-item" data-index="1" data-scroll-reveal>
-        <div class="stat-visual">
-          <div class="stat-icon-big">⭐</div>
-          <div class="stat-glow"></div>
-        </div>
-        <div class="stat-content">
-          <div class="stat-number-big" [attr.data-value]="getText('stat2Number')">{{ getText('stat2Number') }}</div>
-          <div class="stat-label-big">{{ getText('stat2Label') }}</div>
-        </div>
-      </div>
-      <div class="stat-item" data-index="2" data-scroll-reveal>
-        <div class="stat-visual">
-          <div class="stat-icon-big">💼</div>
-          <div class="stat-glow"></div>
-        </div>
-        <div class="stat-content">
-          <div class="stat-number-big" [attr.data-value]="getText('stat3Number')">{{ getText('stat3Number') }}</div>
-          <div class="stat-label-big">{{ getText('stat3Label') }}</div>
-        </div>
-      </div>
-      <div class="stat-item" data-index="3" data-scroll-reveal>
-        <div class="stat-visual">
-          <div class="stat-icon-big">🎯</div>
-          <div class="stat-glow"></div>
-        </div>
-        <div class="stat-content">
-          <div class="stat-number-big" [attr.data-value]="getText('stat4Number')">{{ getText('stat4Number') }}</div>
-          <div class="stat-label-big">{{ getText('stat4Label') }}</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section - Big, Bold, Beautiful Scroll Animations -->
-  <section class="features-section" data-scroll-section>
-    <div class="features-background">
-      <div class="big-morphing-blob blob-1"></div>
-      <div class="big-morphing-blob blob-2"></div>
+  <!-- About Us Section -->
+  <section class="about-section" id="about">
+    <div class="about-background">
+      <div class="spider-web web-1"></div>
+      <div class="spider-web web-2"></div>
+      <div class="spider-web web-3"></div>
     </div>
-    
-    <div class="section-header" data-scroll-reveal>
-      <h2 class="big-title">{{ getText('featuresTitle') }}</h2>
-      <p class="big-subtitle">{{ getText('featuresSubtitle') }}</p>
-    </div>
-    
-    <div class="features-showcase">
-      <div class="feature-item" data-index="0" data-scroll-reveal>
-        <div class="feature-number">01</div>
-        <div class="feature-visual">
-          <div class="big-icon">🎨</div>
-          <div class="icon-glow"></div>
+    <div class="about-content">
+      <div class="about-header">
+        <div class="spider-sticker sticker-1">
+          <svg viewBox="0 0 100 100" class="spider-icon">
+            <circle cx="50" cy="30" r="15" fill="currentColor"/>
+            <ellipse cx="50" cy="50" rx="20" ry="25" fill="currentColor"/>
+            <line x1="30" y1="20" x2="20" y2="10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="70" y1="20" x2="80" y2="10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="25" y1="40" x2="15" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="75" y1="40" x2="85" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="30" y1="60" x2="20" y2="70" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="70" y1="60" x2="80" y2="70" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="35" y1="70" x2="25" y2="85" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="65" y1="70" x2="75" y2="85" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
         </div>
-        <div class="feature-text">
-          <h3 class="big-feature-title">{{ getText('feature1Title') }}</h3>
-          <p class="big-feature-description">{{ getText('feature1Description') }}</p>
-        </div>
-      </div>
-      
-      <div class="feature-item" data-index="1" data-scroll-reveal>
-        <div class="feature-number">02</div>
-        <div class="feature-visual">
-          <div class="big-icon">⚡</div>
-          <div class="icon-glow"></div>
-        </div>
-        <div class="feature-text">
-          <h3 class="big-feature-title">{{ getText('feature2Title') }}</h3>
-          <p class="big-feature-description">{{ getText('feature2Description') }}</p>
-        </div>
-      </div>
-      
-      <div class="feature-item" data-index="2" data-scroll-reveal>
-        <div class="feature-number">03</div>
-        <div class="feature-visual">
-          <div class="big-icon">🔍</div>
-          <div class="icon-glow"></div>
-        </div>
-        <div class="feature-text">
-          <h3 class="big-feature-title">{{ getText('feature3Title') }}</h3>
-          <p class="big-feature-description">{{ getText('feature3Description') }}</p>
+        <h2 class="section-title about-title">ABOUT US</h2>
+        <div class="spider-sticker sticker-2">
+          <svg viewBox="0 0 100 100" class="spider-icon">
+            <circle cx="50" cy="30" r="15" fill="currentColor"/>
+            <ellipse cx="50" cy="50" rx="20" ry="25" fill="currentColor"/>
+            <line x1="30" y1="20" x2="20" y2="10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="70" y1="20" x2="80" y2="10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="25" y1="40" x2="15" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="75" y1="40" x2="85" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="30" y1="60" x2="20" y2="70" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="70" y1="60" x2="80" y2="70" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="35" y1="70" x2="25" y2="85" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <line x1="65" y1="70" x2="75" y2="85" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
         </div>
       </div>
       
-      <div class="feature-item" data-index="3" data-scroll-reveal>
-        <div class="feature-number">04</div>
-        <div class="feature-visual">
-          <div class="big-icon">💬</div>
-          <div class="icon-glow"></div>
-        </div>
-        <div class="feature-text">
-          <h3 class="big-feature-title">{{ getText('feature4Title') }}</h3>
-          <p class="big-feature-description">{{ getText('feature4Description') }}</p>
+      <div class="about-main">
+        <div class="about-text-wrapper">
+          <p class="about-intro">
+            In nature, spiders craft intricate webs—delicate yet strong, beautiful yet functional. 
+            Each thread is placed with purpose, creating a masterpiece that serves both art and function.
+          </p>
+          
+          <div class="about-spiders">
+            <div class="spider-count">
+              <span class="number">2</span>
+              <span class="label">Spiders</span>
+            </div>
+            <div class="limbs-count">
+              <span class="number">16</span>
+              <span class="label">Limbs</span>
+            </div>
+            <div class="equals">=</div>
+            <div class="result">
+              <span class="text">Everything</span>
+            </div>
+          </div>
+          
+          <p class="about-philosophy">
+            We are Spiders. Just as two spiders work together, weaving their webs with precision and care, 
+            we craft digital experiences that connect, engage, and transform. With sixteen limbs between us— 
+            design, development, strategy, creativity, innovation, passion, dedication, and excellence— 
+            we build everything your vision needs to thrive in the digital world.
+          </p>
+          
+          <p class="about-mission">
+            Every website we create is a web of possibilities—interconnected, resilient, and designed to catch 
+            opportunities. We don't just build websites; we weave digital dreams into reality, thread by thread, 
+            pixel by pixel, until your vision becomes a masterpiece that stands the test of time.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Projects Preview - Big, Bold, Beautiful -->
-  <section class="projects-preview-section" data-scroll-section>
-    <div class="projects-background">
-      <div class="projects-blob blob-1"></div>
-      <div class="projects-blob blob-2"></div>
-    </div>
-    
-    <div class="section-header" data-scroll-reveal>
-      <h2 class="big-title">{{ getText('projectsTitle') }}</h2>
-      <p class="big-subtitle">{{ getText('projectsSubtitle') }}</p>
-    </div>
-    
-    <div class="projects-showcase">
-      <div class="project-card" data-index="0" data-scroll-reveal>
-        <div class="project-number">01</div>
-        <div class="project-image-wrapper">
-          <div class="project-image" [style.background-image]="'url(' + projectImages[0] + ')'">
-            <div class="image-overlay"></div>
-            <div class="project-shine"></div>
-          </div>
-          <div class="project-glow"></div>
-        </div>
-        <div class="project-content">
-          <span class="project-category">{{ getText('project1Category') }}</span>
-          <h3 class="project-title-big">{{ getText('project1Title') }}</h3>
-          <p class="project-description-big">{{ getText('project1Description') }}</p>
-          <a [routerLink]="getRoute('/portfolio')" class="project-link-big">
-            <span>{{ getText('viewProject') }}</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
+  <!-- Portfolio Section -->
+  <section class="portfolio-section" id="portfolio" [class.portfolio-fixed]="isPortfolioFixed">
+    <div class="portfolio-content" [class.fixed-content]="isPortfolioFixed" [class.scrolling-up]="isScrollingUpPortfolio" [style.transform]="portfolioContentTransform">
+      <div class="portfolio-header">
+        <h2 class="section-title">PORTFOLIO</h2>
       </div>
-      
-      <div class="project-card" data-index="1" data-scroll-reveal>
-        <div class="project-number">02</div>
-        <div class="project-image-wrapper">
-          <div class="project-image" [style.background-image]="'url(' + projectImages[1] + ')'">
-            <div class="image-overlay"></div>
-            <div class="project-shine"></div>
+      <div class="portfolio-container">
+        <button class="portfolio-nav-btn portfolio-nav-left" (click)="scrollPortfolioLeft()" [class.disabled]="currentPortfolioIndex === 0">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="portfolio-items-wrapper">
+          <div class="portfolio-items" [style.transform]="'translateX(' + portfolioOffset + 'px)'">
+            <div class="portfolio-item" *ngFor="let project of portfolioProjects">
+              <div class="portfolio-card">
+                <button class="portfolio-link" type="button">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M5 15L15 5M15 5H7.5M15 5V12.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <div class="portfolio-image">
+                  <img [src]="project.image" [alt]="project.name" />
+                </div>
+                <h3 class="portfolio-name">{{ project.name }}</h3>
+              </div>
+            </div>
           </div>
-          <div class="project-glow"></div>
         </div>
-        <div class="project-content">
-          <span class="project-category">{{ getText('project2Category') }}</span>
-          <h3 class="project-title-big">{{ getText('project2Title') }}</h3>
-          <p class="project-description-big">{{ getText('project2Description') }}</p>
-          <a [routerLink]="getRoute('/portfolio')" class="project-link-big">
-            <span>{{ getText('viewProject') }}</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
+        <button class="portfolio-nav-btn portfolio-nav-right" (click)="scrollPortfolioRight()" [class.disabled]="currentPortfolioIndex >= portfolioProjects.length - 3">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
-      
-      <div class="project-card" data-index="2" data-scroll-reveal>
-        <div class="project-number">03</div>
-        <div class="project-image-wrapper">
-          <div class="project-image" [style.background-image]="'url(' + projectImages[2] + ')'">
-            <div class="image-overlay"></div>
-            <div class="project-shine"></div>
+    </div>
+  </section>
+
+  <!-- Processes Section -->
+  <section class="processes-section" id="processes" [class.processes-fixed]="isProcessesFixed">
+    <div class="processes-background"></div>
+    <div class="processes-content" [class.fixed-content]="isProcessesFixed" [class.scrolling-up]="isScrollingUpProcesses" [style.transform]="processesContentTransform">
+      <div class="processes-header">
+        <h2 class="section-title">PROCESSES & MANAGEMENT</h2>
+        <p class="processes-intro">
+          Our process turns vision into results. With clear planning and transparent communication, 
+          we manage every step to deliver exactly what your product needs to succeed.
+        </p>
+    </div>
+      <div class="processes-list">
+        <div class="process-item" 
+             *ngFor="let process of processes; let i = index"
+             [class.active]="i === currentProcessIndex">
+          <div class="process-number">[{{ formatProcessNumber(i + 1) }}]</div>
+          <div class="process-icon">
+            <div class="icon-3d" [innerHTML]="process.icon"></div>
           </div>
-          <div class="project-glow"></div>
-        </div>
-        <div class="project-content">
-          <span class="project-category">{{ getText('project3Category') }}</span>
-          <h3 class="project-title-big">{{ getText('project3Title') }}</h3>
-          <p class="project-description-big">{{ getText('project3Description') }}</p>
-          <a [routerLink]="getRoute('/portfolio')" class="project-link-big">
-            <span>{{ getText('viewProject') }}</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
+          <div class="process-info">
+            <h3 class="process-title">{{ process.title }}</h3>
+            <p class="process-description">{{ process.description }}</p>
+          </div>
         </div>
       </div>
     </div>
-    
-    <div class="projects-cta" data-scroll-reveal>
-      <a [routerLink]="getRoute('/portfolio')" class="btn-primary-large">
-        <span>{{ getText('viewAllProjects') }}</span>
-        <div class="btn-ripple"></div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section" id="stats">
+    <div class="stats-background"></div>
+    <div class="stats-content">
+      <h2 class="stats-title">SPIDERS IN THE NUMBERS</h2>
+      <div class="stats-grid">
+        <div class="stat-card" *ngFor="let stat of stats">
+          <div class="stat-icon">
+            <div class="icon-3d" [innerHTML]="stat.icon"></div>
+          </div>
+          <div class="stat-value">{{ stat.value }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+      <p class="stats-description">
+        We simplify the complex. Modern frameworks and tools. High-end design. 
+        Scalable digital experiences that deliver results — in the numbers.
+      </p>
+      <a routerLink="/contact" class="contact-btn-large">
+        Contact us
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </a>
     </div>
   </section>
 
-  <!-- Testimonials - Big, Bold, Beautiful -->
-  <section class="testimonials-section" data-scroll-section>
-    <div class="testimonials-background">
-      <div class="testimonials-blob blob-1"></div>
-      <div class="testimonials-blob blob-2"></div>
+  <!-- Final CTA Section -->
+  <section class="final-cta-section">
+    <div class="cta-background">
+      <div class="cta-blob blob-1"></div>
+      <div class="cta-blob blob-2"></div>
     </div>
-    
-    <div class="section-header" data-scroll-reveal>
-      <h2 class="big-title">{{ getText('testimonialsTitle') }}</h2>
-      <p class="big-subtitle">{{ getText('testimonialsSubtitle') }}</p>
-    </div>
-    
-    <div class="testimonials-showcase">
-      <div class="testimonial-card" data-index="0" data-scroll-reveal>
-        <div class="testimonial-number">01</div>
-        <div class="testimonial-quote">
-          <div class="quote-icon-big">"</div>
-          <p class="testimonial-text-big">{{ getText('testimonial1Quote') }}</p>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-avatar-big">SJ</div>
-          <div class="author-info">
-            <div class="author-name-big">{{ getText('testimonial1Author') }}</div>
-            <div class="author-role-big">{{ getText('testimonial1Role') }}</div>
-          </div>
-        </div>
-        <div class="testimonial-glow"></div>
-        <div class="testimonial-particles">
-          <div class="testimonial-particle"></div>
-          <div class="testimonial-particle"></div>
-          <div class="testimonial-particle"></div>
-        </div>
-      </div>
-      
-      <div class="testimonial-card" data-index="1" data-scroll-reveal>
-        <div class="testimonial-number">02</div>
-        <div class="testimonial-quote">
-          <div class="quote-icon-big">"</div>
-          <p class="testimonial-text-big">{{ getText('testimonial2Quote') }}</p>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-avatar-big">MC</div>
-          <div class="author-info">
-            <div class="author-name-big">{{ getText('testimonial2Author') }}</div>
-            <div class="author-role-big">{{ getText('testimonial2Role') }}</div>
-          </div>
-        </div>
-        <div class="testimonial-glow"></div>
-        <div class="testimonial-particles">
-          <div class="testimonial-particle"></div>
-          <div class="testimonial-particle"></div>
-          <div class="testimonial-particle"></div>
-        </div>
-      </div>
-      
-      <div class="testimonial-card" data-index="2" data-scroll-reveal>
-        <div class="testimonial-number">03</div>
-        <div class="testimonial-quote">
-          <div class="quote-icon-big">"</div>
-          <p class="testimonial-text-big">{{ getText('testimonial3Quote') }}</p>
-        </div>
-        <div class="testimonial-author">
-          <div class="author-avatar-big">ER</div>
-          <div class="author-info">
-            <div class="author-name-big">{{ getText('testimonial3Author') }}</div>
-            <div class="author-role-big">{{ getText('testimonial3Role') }}</div>
-          </div>
-        </div>
-        <div class="testimonial-glow"></div>
-        <div class="testimonial-particles">
-          <div class="testimonial-particle"></div>
-          <div class="testimonial-particle"></div>
-          <div class="testimonial-particle"></div>
-        </div>
-      </div>
+    <div class="cta-content">
+      <h2 class="cta-title">Let's do projects together!</h2>
+      <p class="cta-description">
+        Share your goals with us — and let's create something that makes an impact
+      </p>
+      <a routerLink="/contact" class="contact-btn-large">
+        Contact us
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
   </section>
-
-  <!-- CTA Section -->
-  <app-cta pageType="home"></app-cta>
 </main>

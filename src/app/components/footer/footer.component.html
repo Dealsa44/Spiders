@@ -1,32 +1,46 @@
 <footer class="footer">
   <div class="footer-content">
-    <!-- Company Info Section -->
-    <div class="footer-section">
-      <h3>{{ getText('companyName') }}</h3>
-      <p>{{ getText('companyDescription') }}</p>
+    <div class="footer-top">
+      <div class="footer-email">
+        <a href="mailto:hello&#64;spiders.dev">hello&#64;spiders.dev</a>
+    </div>
     </div>
 
-    <!-- Address Section -->
-    <div class="footer-section">
-      <h4>{{ getText('address') }}</h4>
-      <p>{{ getText('addressValue') }}</p>
-    </div>
-
-    <!-- Phone Section -->
-    <div class="footer-section">
-      <h4>{{ getText('phone') }}</h4>
-      <p><a [href]="'tel:' + getText('phoneValue')">{{ getText('phoneValue') }}</a></p>
-    </div>
-
-    <!-- Email Section -->
-    <div class="footer-section">
-      <h4>{{ getText('email') }}</h4>
-      <p><a [href]="'mailto:' + getText('emailValue')">{{ getText('emailValue') }}</a></p>
+    <div class="footer-divider"></div>
+    
+    <div class="footer-social">
+      <a href="#" class="social-link">
+        LinkedIn
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#" class="social-link">
+        Telegram
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#" class="social-link">
+        Dribbble
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#" class="social-link">
+        Behance
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <p>{{ getText('copyright') }}</p>
+    <p class="copyright">© 2025 Spiders Web Development Agency</p>
+    <div class="footer-logo">
+      <span class="logo-x">S</span>
+      <span class="logo-text">PIDERS</span>
+    </div>
   </div>
 </footer>
-

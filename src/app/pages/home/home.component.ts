@@ -1,398 +1,736 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { LanguageService } from '../../../core/services/language.service';
-import { homeMocks } from '../../../core/mocks/home-mocks';
-import { CtaComponent } from '../../components/cta/cta.component';
-
-interface Particle {
-  x: number;
-  y: number;
-  delay: number;
-  duration?: number;
-}
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, CtaComponent],
+  imports: [CommonModule, RouterModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
+  animations: [
+    trigger('serviceChange', [
+      transition('* => *', [
+        style({ opacity: 0, transform: 'translateX(-50%) translateY(20px)' }),
+        animate('600ms ease-out', style({ opacity: 1, transform: 'translateX(-50%) translateY(0)' }))
+      ])
+    ]),
+    trigger('processSlide', [
+      transition('out => in', [
+        style({ opacity: 0, transform: 'translateY(50px)' }),
+        animate('800ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition('in => out', [
+        animate('400ms ease-in', style({ opacity: 0, transform: 'translateY(-50px)' }))
+      ])
+    ])
+  ]
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
-  private currentLanguageIndex = 0;
-  private texts = homeMocks;
-  private languageSubscription!: Subscription;
-  private intersectionObserver?: IntersectionObserver;
-  private parallaxElements: HTMLElement[] = [];
-  private parallaxOriginalTops: Map<HTMLElement, number> = new Map();
-  private animationFrameId?: number;
-  private lastScrollY = 0;
-  private scrollDirection: 'up' | 'down' = 'down';
+  isNavbarFixed = false;
+  navbarTransform = 'translateY(0)'; // Transform for smooth movement
+  currentServiceIndex = 0;
+  currentProcessIndex = 0;
+  portfolioOffset = 0;
+  currentPortfolioIndex = 0; // Current visible portfolio item index
+  isServicesFixed = false; // Track if services section is fixed
+  servicesContentTransform = 'translateY(0)'; // Transform for smooth push-up transition
+  isScrollingUpServices = false; // Track scroll direction for services section
+  isProcessesFixed = false; // Track if processes section is fixed
+  processesContentTransform = 'translateY(0)'; // Transform for smooth push-up transition
+  isScrollingUpProcesses = false; // Track scroll direction for processes section
+  isPortfolioFixed = false; // Track if portfolio section is fixed
+  portfolioContentTransform = 'translateY(0)'; // Transform for smooth push-up transition
+  isScrollingUpPortfolio = false; // Track scroll direction for portfolio section
   
-  projectImages: string[] = [];
-  particles: Particle[] = [];
-  featureParticles: Particle[] = [];
+  private scrollThreshold = 100;
+  private navbarHeight = 80; // Approximate navbar height
+  private viewportHeight = 0;
+  private serviceScrollPositions: number[] = [];
+  private processScrollPositions: number[] = [];
+  private aboutSectionTop = 0; // Top position of about section
+  private portfolioScrollStart = 0;
+  private portfolioScrollEnd = 0;
+  private statsScrollStart = 0;
+  private scrollHandler?: () => void;
+  private servicesSectionTop = 0; // Top position of services section
+  private servicesSectionHeight = 0; // Height of services section
+  private servicesFixedStart = 0; // Scroll position where fixing starts
+  private servicesFixedEnd = 0; // Scroll position where fixing ends
+  private processesSectionTop = 0; // Top position of processes section
+  private processesSectionHeight = 0; // Height of processes section
+  private processesFixedStart = 0; // Scroll position where fixing starts
+  private processesFixedEnd = 0; // Scroll position where fixing ends
+  private portfolioSectionTop = 0; // Top position of portfolio section
+  private portfolioSectionHeight = 0; // Height of portfolio section
+  private portfolioFixedStart = 0; // Scroll position where fixing starts
+  private portfolioFixedEnd = 0; // Scroll position where fixing ends
+  private lastScrollY = 0; // Track last scroll position for direction
 
-  constructor(
-    private languageService: LanguageService,
-    private cdr: ChangeDetectorRef
-  ) {}
+  services = [
+    {
+      name: 'Development',
+      description: 'Empowering your business decisions with advanced analytical tools and expertise.',
+      icon: '💻'
+    },
+    {
+      name: 'UX/UI Design',
+      description: 'Creating intuitive and beautiful user experiences that engage and convert.',
+      icon: '🎨'
+    },
+    {
+      name: 'Full-Stack Solutions',
+      description: 'End-to-end development from frontend to backend, ensuring seamless integration.',
+      icon: '⚡'
+    },
+    {
+      name: 'E-Commerce',
+      description: 'Building powerful online stores that drive sales and customer satisfaction.',
+      icon: '🛒'
+    }
+  ];
+
+  portfolioProjects = [
+    { 
+      name: 'E-Commerce Platform', 
+      image: 'https://picsum.photos/400/300?random=1'
+    },
+    { 
+      name: 'Corporate Website', 
+      image: 'https://picsum.photos/400/300?random=2'
+    },
+    { 
+      name: 'Portfolio Showcase', 
+      image: 'https://picsum.photos/400/300?random=3'
+    },
+    { 
+      name: 'SaaS Dashboard', 
+      image: 'https://picsum.photos/400/300?random=4'
+    },
+    { 
+      name: 'Mobile App Landing', 
+      image: 'https://picsum.photos/400/300?random=5'
+    },
+    { 
+      name: 'Restaurant Website', 
+      image: 'https://picsum.photos/400/300?random=6'
+    },
+    { 
+      name: 'Fitness Studio Platform', 
+      image: 'https://picsum.photos/400/300?random=7'
+    },
+    { 
+      name: 'Real Estate Portal', 
+      image: 'https://picsum.photos/400/300?random=8'
+    }
+  ];
+
+  processes = [
+    {
+      title: 'Product Requirements',
+      description: 'We start every project by gathering and clarifying your product requirements. This ensures we build exactly what you need.',
+      icon: '📋'
+    },
+    {
+      title: '2-Week Sprint',
+      description: 'Our development runs in focused 2-week sprints. Each sprint starts with planning and ends with a demo — so you see real progress, fast.',
+      icon: '⚡'
+    },
+    {
+      title: 'Weekly Reports',
+      description: 'We keep you in the loop with clear, concise weekly updates. You\'ll always know what\'s been done, what\'s in progress, and what\'s coming next.',
+      icon: '📊'
+    },
+    {
+      title: 'Communication',
+      description: 'We stay connected through regular check-ins and instant messaging. You\'ll always have a direct line to our team — no long waits, no guesswork.',
+      icon: '💬'
+    }
+  ];
+
+  stats = [
+    { value: '60+', label: 'Projects launched', icon: '🚀' },
+    { value: '2-3', label: 'Months to launch', icon: '📅' },
+    { value: '30+', label: 'People in the team', icon: '👥' },
+    { value: '€15000', label: 'Minimum project price', icon: '€' }
+  ];
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.currentLanguageIndex = this.languageService.getCurrentLanguage();
-    this.languageSubscription = this.languageService.currentLanguage$.subscribe(
-      (index) => {
-        this.currentLanguageIndex = index;
-      }
-    );
-    
-    // Generate random project images from Unsplash
-    this.generateProjectImages();
-    
-    // Generate particles for CTA section
-    this.generateParticles();
-    
-    // Generate particles for features section
-    this.generateFeatureParticles();
+    // Calculate scroll positions for different sections
+    setTimeout(() => {
+      this.calculateScrollPositions();
+    }, 100);
   }
 
   ngAfterViewInit(): void {
-    // Setup scroll animations with Intersection Observer
-    this.setupScrollAnimations();
+    this.viewportHeight = window.innerHeight;
     
-    // Setup parallax scrolling
-    this.setupParallax();
+    // Set CSS variables for services and processes count early
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.style.setProperty('--services-count', String(this.services.length));
+    }
     
-    // Initial check - don't apply parallax on initial load
-    requestAnimationFrame(() => {
-      this.checkVisibility();
-      // Reset all parallax elements to initial state
-      this.resetParallax();
-      // Initialize scroll reveals
-      this.updateScrollReveals();
-    });
+    const processesSection = document.getElementById('processes');
+    if (processesSection) {
+      processesSection.style.setProperty('--processes-count', String(this.processes.length));
+    }
+    
+    this.setupScrollListeners();
+    // Initial navbar position at bottom
+    this.updateNavbarPosition(0);
   }
 
   ngOnDestroy(): void {
-    if (this.languageSubscription) {
-      this.languageSubscription.unsubscribe();
-    }
-    
-    if (this.intersectionObserver) {
-      this.intersectionObserver.disconnect();
-    }
-    
-    if (this.animationFrameId) {
-      cancelAnimationFrame(this.animationFrameId);
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler);
     }
   }
 
-  getText(key: string): string {
-    return this.texts[key]?.[this.currentLanguageIndex] || '';
+  private calculateScrollPositions(): void {
+    const servicesSection = document.getElementById('services');
+    const processesSection = document.getElementById('processes');
+    const portfolioSection = document.getElementById('portfolio');
+    const statsSection = document.getElementById('stats');
+
+    if (servicesSection) {
+      const rect = servicesSection.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const sectionTop = rect.top + scrollTop;
+      const sectionHeight = rect.height;
+      
+      this.servicesSectionTop = sectionTop;
+      this.servicesSectionHeight = sectionHeight;
+      
+      // Calculate when section becomes fully visible (top reaches viewport top)
+      // This is when the top of the section reaches the top of the viewport
+      this.servicesFixedStart = sectionTop;
+      
+      // Calculate end position: after scrolling through all services
+      // Each service should take approximately viewport height to scroll through
+      const viewportHeight = window.innerHeight;
+      const scrollPerService = viewportHeight; // Each service takes full viewport height
+      this.servicesFixedEnd = this.servicesFixedStart + (this.services.length * scrollPerService);
+      
+      // Set CSS variable for services count
+      servicesSection.style.setProperty('--services-count', String(this.services.length));
+      
+      // Calculate positions for each service
+      const serviceHeight = sectionHeight / this.services.length;
+      this.serviceScrollPositions = this.services.map((_, i) => sectionTop + (i * serviceHeight));
+    }
+
+    if (processesSection) {
+      const rect = processesSection.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const sectionTop = rect.top + scrollTop;
+      const sectionHeight = rect.height;
+      
+      this.processesSectionTop = sectionTop;
+      this.processesSectionHeight = sectionHeight;
+      
+      // Calculate when section becomes fully visible (top reaches viewport top)
+      this.processesFixedStart = sectionTop;
+      
+      // Calculate end position: after scrolling through all processes
+      // Each process should take approximately viewport height to scroll through
+      const viewportHeight = window.innerHeight;
+      const scrollPerProcess = viewportHeight; // Each process takes full viewport height
+      this.processesFixedEnd = this.processesFixedStart + (this.processes.length * scrollPerProcess);
+      
+      // Set CSS variable for processes count
+      processesSection.style.setProperty('--processes-count', String(this.processes.length));
+      
+      // Calculate positions for each process
+      const processHeight = sectionHeight / this.processes.length;
+      this.processScrollPositions = this.processes.map((_, i) => sectionTop + (i * processHeight));
+    }
+
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      const rect = aboutSection.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      this.aboutSectionTop = rect.top + scrollTop;
+    }
+
+    if (portfolioSection) {
+      const rect = portfolioSection.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      this.portfolioScrollStart = rect.top + scrollTop;
+      this.portfolioScrollEnd = this.portfolioScrollStart + rect.height;
+    }
+
+    if (statsSection) {
+      const rect = statsSection.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      this.statsScrollStart = rect.top + scrollTop;
+    }
   }
 
-  getRoute(route: string): string {
-    const langCode = this.languageService.getCurrentLanguageCode();
-    return `/${langCode}${route}`;
-  }
-
-  private generateProjectImages(): void {
-    // Use Picsum Photos for reliable random images
-    // Each project gets a unique, high-quality random image
-    const width = 800;
-    const height = 600;
-    
-    // Generate unique random IDs for each project
-    // Using timestamp + random number + index for uniqueness
-    const baseTime = Date.now();
-    this.projectImages = Array.from({ length: 3 }, (_, index) => {
-      const randomId = Math.floor(Math.random() * 10000) + baseTime + (index * 1000);
-      return `https://picsum.photos/seed/${randomId}/${width}/${height}`;
-    });
-    
-    // Log for debugging (remove in production)
-    console.log('Generated project images:', this.projectImages);
-  }
-
-  private generateParticles(): void {
-    // Generate 20 particles with random positions
-    this.particles = Array.from({ length: 20 }, (_, i) => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      delay: Math.random() * 3
-    }));
-  }
-
-  private generateFeatureParticles(): void {
-    // Generate floating particles for features section
-    this.featureParticles = Array.from({ length: 15 }, (_, i) => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      delay: Math.random() * 5,
-      duration: 8 + Math.random() * 4 // 8-12 seconds
-    }));
-  }
-
-  private setupScrollAnimations(): void {
-    // Use Intersection Observer for better performance
-    this.intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const element = entry.target as HTMLElement;
-            const delay = element.getAttribute('data-delay') || '0';
-            const delayMs = parseFloat(delay) * 1000;
-            
-            setTimeout(() => {
-              element.classList.add('visible');
-            }, delayMs);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -100px 0px'
-      }
-    );
-
-    // Observe all animatable elements
-    const animatableElements = document.querySelectorAll('[data-animate]');
-    animatableElements.forEach(el => {
-      this.intersectionObserver?.observe(el);
-    });
-  }
-
-  private setupParallax(): void {
-    // Collect all parallax elements (excluding hero section)
-    const allParallaxElements = Array.from(
-      document.querySelectorAll('[data-parallax]')
-    ) as HTMLElement[];
-    
-    // Filter out hero section and store original positions
-    this.parallaxElements = allParallaxElements.filter(el => {
-      if (el.classList.contains('hero-section')) {
-        return false; // Skip hero section
-      }
-      // Store original top position before any transforms
-      const rect = el.getBoundingClientRect();
-      this.parallaxOriginalTops.set(el, rect.top + window.scrollY);
-      el.style.willChange = 'transform';
-      return true;
-    });
+  private setupScrollListeners(): void {
+    this.scrollHandler = () => this.onScroll();
+    window.addEventListener('scroll', this.scrollHandler, { passive: true });
+    this.onScroll(); // Initial check
   }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
-    // Detect scroll direction
-    const currentScrollY = window.scrollY || window.pageYOffset;
-    this.scrollDirection = currentScrollY > this.lastScrollY ? 'down' : 'up';
-    this.lastScrollY = currentScrollY;
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
     
-    // Throttle scroll events using requestAnimationFrame
-    if (!this.animationFrameId) {
-      this.animationFrameId = requestAnimationFrame(() => {
-        this.updateParallax();
-        this.updateScrollReveals();
-        this.animationFrameId = undefined;
+    // Update navbar position smoothly
+    this.updateNavbarPosition(scrollY);
+    
+    // Services section - change content as you scroll
+    this.updateServicesSection(scrollY);
+    
+    // Portfolio section - horizontal scroll
+    this.updatePortfolioSection(scrollY);
+    
+    // Processes section - slide up animation
+    this.updateProcessesSection(scrollY);
+    
+    this.lastScrollY = scrollY;
+    this.cdr.detectChanges();
+  }
+
+  private updateNavbarPosition(scrollY: number): void {
+    const windowHeight = window.innerHeight;
+    
+    // Calculate scroll progress (0 to 1) over one viewport height
+    const scrollProgress = Math.min(1, Math.max(0, scrollY / windowHeight));
+    
+    // Distance to move = windowHeight - navbarHeight (from bottom to top)
+    const distanceToMove = windowHeight - this.navbarHeight;
+    
+    // Always use transform - no switching positioning methods
+    // When scrollProgress = 0, navbar is at bottom (translateY(0))
+    // When scrollProgress = 1, navbar is at top (translateY(-distanceToMove))
+    const translateY = -(scrollProgress * distanceToMove);
+    this.navbarTransform = `translateY(${translateY}px)`;
+    
+    // Track if we're at the top for styling purposes
+    this.isNavbarFixed = scrollProgress >= 1;
+  }
+
+  private updateServicesSection(scrollY: number): void {
+    const servicesSection = document.getElementById('services');
+    const aboutSection = document.getElementById('about');
+    if (!servicesSection || !aboutSection) return;
+
+    const viewportHeight = window.innerHeight;
+
+    const servicesTop = this.servicesSectionTop;
+    const aboutTop = this.aboutSectionTop;
+
+    if (!servicesTop || !aboutTop) return;
+
+    // Absolute scroll ranges
+    const pinStart = servicesTop;                 // when services reach viewport top
+    const pinEnd = aboutTop - viewportHeight;      // when about top hits viewport bottom
+    const transitionEnd = aboutTop;                // when about top hits viewport top
+
+    const rect = servicesSection.getBoundingClientRect();
+    const isScrollingUp = scrollY < this.lastScrollY;
+    this.isScrollingUpServices = isScrollingUp;
+
+    // ---------- BEFORE SERVICES ----------
+    if (scrollY < pinStart) {
+      this.isServicesFixed = false;
+      this.servicesContentTransform = 'translateY(0)';
+      this.currentServiceIndex = 0;
+      return;
+    }
+
+    // ---------- AFTER EVERYTHING (ABOUT FULLY ENTERED) ----------
+    if (scrollY >= transitionEnd) {
+      this.isServicesFixed = false;
+      this.servicesContentTransform = 'translateY(0)';
+      this.currentServiceIndex = this.services.length - 1;
+      return;
+    }
+
+    // ---------- SPECIAL CASE: SCROLLING UP ----------
+    // While scrolling UP, don't snap to fixed until BOTH:
+    // 1. The scroll position reaches pinStart (where section should be pinned)
+    // 2. The section top is actually at viewport top
+    // This prevents that "jump to top" when services first come back into view.
+    if (isScrollingUp) {
+      // If scroll position hasn't reached pinStart yet, keep it unfixed
+      // This ensures natural scrolling until we reach the correct scroll position
+      if (scrollY < pinStart) {
+        this.isServicesFixed = false;
+        this.servicesContentTransform = 'translateY(0)';
+        this.currentServiceIndex = 0;
+        return;
+      }
+      
+      // If section top is still below viewport top, keep it unfixed
+      // This allows the section to scroll naturally into view
+      if (rect.top > 0) {
+        this.isServicesFixed = false;
+        this.servicesContentTransform = 'translateY(0)';
+        // Calculate which service to show based on scroll position
+        if (scrollY >= pinStart && scrollY <= pinEnd) {
+          const totalFixedRange = pinEnd - pinStart;
+          if (totalFixedRange > 0) {
+            const progress = (scrollY - pinStart) / totalFixedRange;
+      const newIndex = Math.min(
+              this.services.length - 1,
+              Math.max(0, Math.floor(progress * this.services.length))
+            );
+            this.currentServiceIndex = newIndex;
+          }
+        } else if (scrollY > pinEnd) {
+          // In transition zone while scrolling up - show last service
+          this.currentServiceIndex = this.services.length - 1;
+        }
+        return;
+      }
+      
+      // If we're scrolling up and still in transition zone, continue with transform
+      if (scrollY > pinEnd) {
+        // Still in transition zone, keep calculating transform
+        const transitionRange = transitionEnd - pinEnd || 1;
+        const transitionProgress = (scrollY - pinEnd) / transitionRange;
+        const translateY = -transitionProgress * viewportHeight;
+        this.servicesContentTransform = `translateY(${translateY}px)`;
+        this.isServicesFixed = true; // Keep fixed during transition
+        this.currentServiceIndex = this.services.length - 1;
+        return;
+      }
+      
+      // Only pin when scrolling up if:
+      // - scrollY >= pinStart (correct scroll position)
+      // - rect.top <= 0 (section is at top)
+      // - scrollY <= pinEnd (not in transition zone)
+      // If all conditions met, fall through to pinned range below
+    }
+
+    // ---------- PINNED RANGE (HEADER FIXED) ----------
+    // Pin when scrolling down OR when all conditions are met while scrolling up
+    this.isServicesFixed = true;
+
+    // A) NORMAL PIN (no push yet) – just change services on scroll
+    if (scrollY <= pinEnd) {
+      this.servicesContentTransform = 'translateY(0)';
+
+      const totalFixedRange = pinEnd - pinStart;
+      if (totalFixedRange > 0) {
+        const progress = (scrollY - pinStart) / totalFixedRange;
+        const newIndex = Math.min(
+          this.services.length - 1,
+          Math.max(0, Math.floor(progress * this.services.length))
+        );
+        this.currentServiceIndex = newIndex;
+      }
+    } 
+    // B) TRANSITION RANGE – about enters, services get pushed up
+    else {
+      const transitionRange = transitionEnd - pinEnd || 1;
+      const transitionProgress = (scrollY - pinEnd) / transitionRange; // 0 → 1
+      const translateY = -transitionProgress * viewportHeight;          // 0 → -100vh
+
+      this.servicesContentTransform = `translateY(${translateY}px)`;
+      this.currentServiceIndex = this.services.length - 1; // keep last service while pushing
+    }
+  }
+
+  private updatePortfolioSection(scrollY: number): void {
+    const portfolioSection = document.getElementById('portfolio');
+    const processesSection = document.getElementById('processes');
+    if (!portfolioSection || !processesSection) return;
+
+    const viewportHeight = window.innerHeight;
+
+    const portfolioTop = this.portfolioSectionTop;
+    const processesTop = this.processesSectionTop;
+
+    if (!portfolioTop || !processesTop) return;
+
+    // Absolute scroll ranges
+    const pinStart = portfolioTop;                 // when portfolio reaches viewport top
+    const pinEnd = processesTop - viewportHeight; // when processes top hits viewport bottom
+    const transitionEnd = processesTop;           // when processes top hits viewport top
+
+    const rect = portfolioSection.getBoundingClientRect();
+    const isScrollingUp = scrollY < this.lastScrollY;
+    this.isScrollingUpPortfolio = isScrollingUp;
+
+    // ---------- BEFORE PORTFOLIO ----------
+    if (scrollY < pinStart) {
+      this.isPortfolioFixed = false;
+      this.portfolioContentTransform = 'translateY(0)';
+      this.updatePortfolioOffset(); // Update offset based on current index
+      return;
+    }
+
+    // ---------- AFTER EVERYTHING (PROCESSES FULLY ENTERED) ----------
+    if (scrollY >= transitionEnd) {
+      this.isPortfolioFixed = false;
+      this.portfolioContentTransform = 'translateY(0)';
+      this.updatePortfolioOffset(); // Update offset based on current index
+      return;
+    }
+
+    // ---------- SPECIAL CASE: SCROLLING UP ----------
+    // While scrolling UP, don't snap to fixed until BOTH:
+    // 1. The scroll position reaches pinStart (where section should be pinned)
+    // 2. The section top is actually at viewport top
+    if (isScrollingUp) {
+      // If scroll position hasn't reached pinStart yet, keep it unfixed
+      if (scrollY < pinStart) {
+        this.isPortfolioFixed = false;
+        this.portfolioContentTransform = 'translateY(0)';
+        this.updatePortfolioOffset();
+        return;
+      }
+      
+      // If section top is still below viewport top, keep it unfixed
+      if (rect.top > 0) {
+        this.isPortfolioFixed = false;
+        this.portfolioContentTransform = 'translateY(0)';
+        this.updatePortfolioOffset();
+        return;
+      }
+      
+      // If we're scrolling up and still in transition zone, continue with transform
+      if (scrollY > pinEnd) {
+        // Still in transition zone, keep calculating transform
+        const transitionRange = transitionEnd - pinEnd || 1;
+        const transitionProgress = (scrollY - pinEnd) / transitionRange;
+        const translateY = -transitionProgress * viewportHeight;
+        this.portfolioContentTransform = `translateY(${translateY}px)`;
+        this.isPortfolioFixed = true; // Keep fixed during transition
+        this.updatePortfolioOffset();
+        return;
+      }
+    }
+
+    // ---------- PINNED RANGE (HEADER FIXED) ----------
+    // Pin when scrolling down OR when all conditions are met while scrolling up
+    this.isPortfolioFixed = true;
+
+    // A) NORMAL PIN (no push yet) – keep current horizontal position
+    if (scrollY <= pinEnd) {
+      this.portfolioContentTransform = 'translateY(0)';
+      this.updatePortfolioOffset(); // Update offset based on current index
+    } 
+    // B) TRANSITION RANGE – processes enters, portfolio gets pushed up
+    else {
+      const transitionRange = transitionEnd - pinEnd || 1;
+      const transitionProgress = (scrollY - pinEnd) / transitionRange; // 0 → 1
+      const translateY = -transitionProgress * viewportHeight;          // 0 → -100vh
+
+      this.portfolioContentTransform = `translateY(${translateY}px)`;
+      this.updatePortfolioOffset(); // Update offset based on current index
+    }
+  }
+
+  private updatePortfolioOffset(): void {
+    // Calculate offset based on current index
+    // Each item is 400px wide + 2rem gap (32px) = 432px total per item
+    // On mobile, item is 300px + 1.5rem gap (24px) = 324px
+    const isMobile = window.innerWidth <= 768;
+    const itemWidth = isMobile ? 324 : 432; // 300px + 24px on mobile, 400px + 32px on desktop
+    const maxIndex = Math.max(0, this.portfolioProjects.length - 3); // Show 3 items at a time
+    const clampedIndex = Math.min(this.currentPortfolioIndex, maxIndex);
+    this.portfolioOffset = -(clampedIndex * itemWidth);
+  }
+
+  scrollPortfolioLeft(): void {
+    if (this.currentPortfolioIndex > 0) {
+      this.currentPortfolioIndex--;
+      this.updatePortfolioOffset();
+    }
+  }
+
+  scrollPortfolioRight(): void {
+    const maxIndex = Math.max(0, this.portfolioProjects.length - 3);
+    if (this.currentPortfolioIndex < maxIndex) {
+      this.currentPortfolioIndex++;
+      this.updatePortfolioOffset();
+    }
+  }
+
+  @HostListener('wheel', ['$event'])
+  onWheel(event: WheelEvent): void {
+    // Only handle horizontal scrolling when portfolio section is fixed
+    if (this.isPortfolioFixed) {
+      const portfolioContainer = document.querySelector('.portfolio-container');
+      const portfolioContent = document.querySelector('.portfolio-content');
+      
+      // Check if event target is within portfolio section
+      if (portfolioContent && portfolioContent.contains(event.target as Node)) {
+        // Check if horizontal scroll (shift + wheel or trackpad horizontal scroll)
+        const isHorizontalScroll = event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY);
+        
+        if (isHorizontalScroll) {
+          event.preventDefault();
+          event.stopPropagation();
+          
+          // Determine scroll direction
+          if (event.shiftKey) {
+            // Shift + wheel: deltaY determines direction
+            if (event.deltaY > 0) {
+              this.scrollPortfolioRight();
+            } else if (event.deltaY < 0) {
+              this.scrollPortfolioLeft();
+            }
+          } else {
+            // Trackpad horizontal scroll: deltaX determines direction
+            if (event.deltaX > 0) {
+              this.scrollPortfolioRight();
+            } else if (event.deltaX < 0) {
+              this.scrollPortfolioLeft();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private updateProcessesSection(scrollY: number): void {
+    const processesSection = document.getElementById('processes');
+    const statsSection = document.getElementById('stats');
+    if (!processesSection || !statsSection) return;
+
+    const viewportHeight = window.innerHeight;
+
+    const processesTop = this.processesSectionTop;
+    const statsTop = this.statsScrollStart;
+
+    if (!processesTop || !statsTop) return;
+
+    // Absolute scroll ranges
+    const pinStart = processesTop;                 // when processes reach viewport top
+    const pinEnd = statsTop - viewportHeight; // when stats top hits viewport bottom
+    const transitionEnd = statsTop;           // when stats top hits viewport top
+
+    const rect = processesSection.getBoundingClientRect();
+    const isScrollingUp = scrollY < this.lastScrollY;
+    this.isScrollingUpProcesses = isScrollingUp;
+
+    // ---------- BEFORE PROCESSES ----------
+    if (scrollY < pinStart) {
+      this.isProcessesFixed = false;
+      this.processesContentTransform = 'translateY(0)';
+      this.currentProcessIndex = 0;
+      return;
+    }
+
+    // ---------- AFTER EVERYTHING (STATS FULLY ENTERED) ----------
+    if (scrollY >= transitionEnd) {
+      this.isProcessesFixed = false;
+      this.processesContentTransform = 'translateY(0)';
+      this.currentProcessIndex = this.processes.length - 1;
+      return;
+    }
+
+    // ---------- SPECIAL CASE: SCROLLING UP ----------
+    // While scrolling UP, don't snap to fixed until BOTH:
+    // 1. The scroll position reaches pinStart (where section should be pinned)
+    // 2. The section top is actually at viewport top
+    // This prevents that "jump to top" when processes first come back into view.
+    if (isScrollingUp) {
+      // If scroll position hasn't reached pinStart yet, keep it unfixed
+      // This ensures natural scrolling until we reach the correct scroll position
+      if (scrollY < pinStart) {
+        this.isProcessesFixed = false;
+        this.processesContentTransform = 'translateY(0)';
+        this.currentProcessIndex = 0;
+        return;
+      }
+      
+      // If section top is still below viewport top, keep it unfixed
+      // This allows the section to scroll naturally into view
+      if (rect.top > 0) {
+        this.isProcessesFixed = false;
+        this.processesContentTransform = 'translateY(0)';
+        // Calculate which process to show based on scroll position
+        if (scrollY >= pinStart && scrollY <= pinEnd) {
+          const totalFixedRange = pinEnd - pinStart;
+          if (totalFixedRange > 0) {
+            const progress = (scrollY - pinStart) / totalFixedRange;
+      const newIndex = Math.min(
+              this.processes.length - 1,
+              Math.max(0, Math.floor(progress * this.processes.length))
+            );
+            this.currentProcessIndex = newIndex;
+          }
+        } else if (scrollY > pinEnd) {
+          // In transition zone while scrolling up - show last process
+          this.currentProcessIndex = this.processes.length - 1;
+        }
+        return;
+      }
+      
+      // If we're scrolling up and still in transition zone, continue with transform
+      if (scrollY > pinEnd) {
+        // Still in transition zone, keep calculating transform
+        const transitionRange = transitionEnd - pinEnd || 1;
+        const transitionProgress = (scrollY - pinEnd) / transitionRange;
+        const translateY = -transitionProgress * viewportHeight;
+        this.processesContentTransform = `translateY(${translateY}px)`;
+        this.isProcessesFixed = true; // Keep fixed during transition
+        this.currentProcessIndex = this.processes.length - 1;
+        return;
+      }
+      
+      // Only pin when scrolling up if:
+      // - scrollY >= pinStart (correct scroll position)
+      // - rect.top <= 0 (section is at top)
+      // - scrollY <= pinEnd (not in transition zone)
+      // If all conditions met, fall through to pinned range below
+    }
+
+    // ---------- PINNED RANGE (HEADER FIXED) ----------
+    // Pin when scrolling down OR when all conditions are met while scrolling up
+    this.isProcessesFixed = true;
+
+    // A) NORMAL PIN (no push yet) – just change processes on scroll
+    if (scrollY <= pinEnd) {
+      this.processesContentTransform = 'translateY(0)';
+
+      const totalFixedRange = pinEnd - pinStart;
+      if (totalFixedRange > 0) {
+        const progress = (scrollY - pinStart) / totalFixedRange;
+        const newIndex = Math.min(
+          this.processes.length - 1,
+          Math.max(0, Math.floor(progress * this.processes.length))
+        );
+        this.currentProcessIndex = newIndex;
+      }
+    } 
+    // B) TRANSITION RANGE – stats enters, processes get pushed up
+    else {
+      const transitionRange = transitionEnd - pinEnd || 1;
+      const transitionProgress = (scrollY - pinEnd) / transitionRange; // 0 → 1
+      const translateY = -transitionProgress * viewportHeight;          // 0 → -100vh
+
+      this.processesContentTransform = `translateY(${translateY}px)`;
+      this.currentProcessIndex = this.processes.length - 1; // keep last process while pushing
+    }
+  }
+
+  scrollToSection(sectionId: string, event: Event): void {
+    event.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80; // Account for fixed navbar
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
       });
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(): void {
-    // Recalculate on resize
-    this.updateParallax();
-  }
-
-  private resetParallax(): void {
-    // Reset all parallax elements to initial state (no transform)
-    this.parallaxElements.forEach(element => {
-      element.style.transform = 'translate3d(0, 0, 0)';
-    });
-  }
-
-  private updateParallax(): void {
-    const scrollY = window.scrollY || window.pageYOffset;
-    
-    // Always reset hero section to prevent any gaps
-    const heroSection = document.querySelector('.hero-section') as HTMLElement;
-    if (heroSection) {
-      heroSection.style.transform = 'translate3d(0, 0, 0)';
-    }
-    
-    this.parallaxElements.forEach(element => {
-      // Double-check: never apply parallax to hero section
-      if (element.classList.contains('hero-section')) {
-        element.style.transform = 'translate3d(0, 0, 0)';
-        return;
-      }
-      
-      const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
-      const rect = element.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const originalTop = this.parallaxOriginalTops.get(element) || 0;
-      
-      // Only apply parallax when element has been scrolled past its original position
-      // and is currently in or below viewport
-      if (scrollY > originalTop && rect.top < windowHeight + 200) {
-        // Calculate how much we've scrolled past the element's original position
-        const scrollPast = scrollY - originalTop;
-        // Apply parallax: element moves at (1 - speed) rate, creating depth effect
-        // Use negative value to move element up relative to scroll (slower movement)
-        const parallaxOffset = -scrollPast * speed;
-        
-        // Apply transform
-        element.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`;
-      } else if (scrollY <= originalTop) {
-        // Reset when scroll is at or above element's original position
-        element.style.transform = 'translate3d(0, 0, 0)';
-      }
-    });
-  }
-
-  private checkVisibility(): void {
-    // Initial visibility check
-    const elements = document.querySelectorAll('[data-animate]');
-    elements.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-      if (isVisible) {
-        const delay = el.getAttribute('data-delay') || '0';
-        const delayMs = parseFloat(delay) * 1000;
-        setTimeout(() => {
-          el.classList.add('visible');
-        }, delayMs);
-      }
-    });
-  }
-
-  private updateScrollReveals(): void {
-    const revealElements = document.querySelectorAll('[data-scroll-reveal]');
-    const windowHeight = window.innerHeight;
-    const scrollY = window.scrollY || window.pageYOffset;
-    
-    revealElements.forEach((element, index) => {
-      const el = element as HTMLElement;
-      const rect = el.getBoundingClientRect();
-      const elementTop = rect.top + scrollY;
-      const elementHeight = rect.height;
-      const elementCenter = elementTop + elementHeight / 2;
-      const viewportCenter = scrollY + windowHeight / 2;
-      
-      // Check if it's a stat item or feature item for different animations
-      const isStatItem = el.classList.contains('stat-item');
-      
-      // Calculate progress based on how close element center is to viewport center
-      // Progress is 0 when element is far away, 1 when centered
-      const distanceFromCenter = Math.abs(elementCenter - viewportCenter);
-      const maxDistance = windowHeight * 0.8; // Start animating when within 80% of viewport
-      let progress = Math.max(0, Math.min(1, 1 - distanceFromCenter / maxDistance));
-      
-      // Apply smoother easing function (ease-in-out cubic with more smoothing)
-      const easeInOutCubic = (t: number): number => {
-        return t < 0.5 
-          ? 4 * t * t * t 
-          : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      };
-      
-      // Apply additional smoothing with ease-out-quart for even smoother feel
-      const smoothProgress = easeInOutCubic(progress);
-      const extraSmooth = 1 - Math.pow(1 - smoothProgress, 4);
-      
-      // Different animation styles for stats vs features vs projects vs testimonials
-      const isProjectCard = el.classList.contains('project-card');
-      const isTestimonialCard = el.classList.contains('testimonial-card');
-      
-      if (isStatItem) {
-        // Stats: Come from sides with rotation
-        const statIndex = parseInt(el.getAttribute('data-index') || '0');
-        const sideOffset = statIndex % 2 === 0 ? -80 : 80; // Alternate sides
-        
-        if (this.scrollDirection === 'down') {
-          const translateX = (1 - extraSmooth) * sideOffset;
-          const translateY = (1 - extraSmooth) * 80;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.8 + extraSmooth * 0.2;
-          const rotateX = (1 - extraSmooth) * 15;
-          el.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale}) rotateX(${rotateX}deg)`;
-          el.style.opacity = opacity.toString();
-        } else {
-          // Reverse for scroll up
-          const translateX = (1 - extraSmooth) * -sideOffset;
-          const translateY = (1 - extraSmooth) * -80;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.8 + extraSmooth * 0.2;
-          const rotateX = (1 - extraSmooth) * -15;
-          el.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale}) rotateX(${rotateX}deg)`;
-          el.style.opacity = opacity.toString();
-        }
-      } else if (isProjectCard) {
-        // Projects: Slide in from sides with 3D rotation
-        const projectIndex = parseInt(el.getAttribute('data-index') || '0');
-        const sideOffset = projectIndex % 2 === 0 ? -150 : 150; // Alternate sides
-        
-        if (this.scrollDirection === 'down') {
-          const translateX = (1 - extraSmooth) * sideOffset;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.85 + extraSmooth * 0.15;
-          const rotateY = (1 - extraSmooth) * (projectIndex % 2 === 0 ? 20 : -20);
-          el.style.transform = `translate3d(${translateX}px, 0, 0) scale(${scale}) rotateY(${rotateY}deg)`;
-          el.style.opacity = opacity.toString();
-        } else {
-          // Reverse for scroll up
-          const translateX = (1 - extraSmooth) * -sideOffset;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.85 + extraSmooth * 0.15;
-          const rotateY = (1 - extraSmooth) * (projectIndex % 2 === 0 ? -20 : 20);
-          el.style.transform = `translate3d(${translateX}px, 0, 0) scale(${scale}) rotateY(${rotateY}deg)`;
-          el.style.opacity = opacity.toString();
-        }
-      } else if (isTestimonialCard) {
-        // Testimonials: Vertical reveal with 3D rotation
-        if (this.scrollDirection === 'down') {
-          const translateY = (1 - extraSmooth) * 120;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.9 + extraSmooth * 0.1;
-          const rotateX = (1 - extraSmooth) * 10;
-          el.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale}) rotateX(${rotateX}deg)`;
-          el.style.opacity = opacity.toString();
-        } else {
-          // Reverse for scroll up
-          const translateY = (1 - extraSmooth) * -120;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.9 + extraSmooth * 0.1;
-          const rotateX = (1 - extraSmooth) * -10;
-          el.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale}) rotateX(${rotateX}deg)`;
-          el.style.opacity = opacity.toString();
-        }
-      } else {
-        // Features: Standard vertical reveal with rotation
-        if (this.scrollDirection === 'down') {
-          const translateY = (1 - extraSmooth) * 120;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.75 + extraSmooth * 0.25;
-          const rotate = (1 - extraSmooth) * 3;
-          el.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale}) rotate(${rotate}deg)`;
-          el.style.opacity = opacity.toString();
-        } else {
-          // Reverse animation when scrolling up
-          const translateY = (1 - extraSmooth) * -120;
-          const opacity = Math.max(0, Math.min(1, extraSmooth));
-          const scale = 0.75 + extraSmooth * 0.25;
-          const rotate = (1 - extraSmooth) * -3;
-          el.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale}) rotate(${rotate}deg)`;
-          el.style.opacity = opacity.toString();
-        }
-      }
-      
-      // Add visible class when in viewport
-      if (rect.top < windowHeight + 100 && rect.bottom > -100) {
-        el.classList.add('in-viewport');
-      } else {
-        el.classList.remove('in-viewport');
-      }
-    });
+  formatProcessNumber(num: number): string {
+    return String(num).padStart(2, '0');
   }
 }

@@ -67,61 +67,72 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private portfolioFixedStart = 0; // Scroll position where fixing starts
   private portfolioFixedEnd = 0; // Scroll position where fixing ends
   private lastScrollY = 0; // Track last scroll position for direction
+  private resizeHandler?: () => void;
 
   services = [
     {
-      name: 'Development',
-      description: 'Empowering your business decisions with advanced analytical tools and expertise.',
-      icon: '💻'
+      name: 'Custom Website Development',
+      description: 'Breathtaking, lightning-fast websites that don\'t just look stunning—they perform flawlessly. Every pixel meticulously crafted, every interaction thoughtfully designed to captivate your audience and convert visitors into loyal customers.',
+      icon: '🌐'
     },
     {
-      name: 'UX/UI Design',
-      description: 'Creating intuitive and beautiful user experiences that engage and convert.',
-      icon: '🎨'
+      name: 'Web Application Development',
+      description: 'Powerful, intelligent applications that transform complex workflows into seamless experiences. We build custom solutions that don\'t just automate—they revolutionize how your business operates, unlocking efficiency you never knew was possible.',
+      icon: '⚙️'
     },
     {
       name: 'Full-Stack Solutions',
-      description: 'End-to-end development from frontend to backend, ensuring seamless integration.',
+      description: 'End-to-end excellence from pixel-perfect interfaces to bulletproof infrastructure. We orchestrate every layer of your digital ecosystem, ensuring seamless integration, peak performance, and a user experience that leaves competitors in the dust.',
       icon: '⚡'
     },
     {
-      name: 'E-Commerce',
-      description: 'Building powerful online stores that drive sales and customer satisfaction.',
+      name: 'E-Commerce Development',
+      description: 'Revenue-generating machines disguised as beautiful online stores. Complete with intelligent payment systems, smart inventory management, and conversion-optimized experiences that don\'t just sell products—they build empires.',
       icon: '🛒'
+    },
+    {
+      name: 'UI/UX Design',
+      description: 'Interfaces so intuitive, so beautiful, so perfectly crafted that users can\'t help but fall in love. We don\'t just design—we engineer emotional connections that turn casual browsers into passionate advocates and drive conversions through the roof.',
+      icon: '🎨'
+    },
+    {
+      name: 'Website Maintenance & Support',
+      description: 'Your digital presence never sleeps, and neither do we. With proactive monitoring, instant security updates, and lightning-fast support, we ensure your site doesn\'t just run smoothly—it runs flawlessly, 24/7, while you focus on growing your business.',
+      icon: '🔧'
     }
   ];
 
   portfolioProjects = [
     { 
-      name: 'E-Commerce Platform', 
+      name: 'Revolutionary E-Commerce Experience', 
       image: 'https://picsum.photos/400/300?random=1'
     },
     { 
-      name: 'Corporate Website', 
+      name: 'Elite Corporate Digital Presence', 
       image: 'https://picsum.photos/400/300?random=2'
     },
     { 
-      name: 'Portfolio Showcase', 
+      name: 'Stunning Creative Portfolio', 
       image: 'https://picsum.photos/400/300?random=3'
     },
     { 
-      name: 'SaaS Dashboard', 
+      name: 'Next-Gen SaaS Platform', 
       image: 'https://picsum.photos/400/300?random=4'
     },
     { 
-      name: 'Mobile App Landing', 
+      name: 'Captivating Mobile Experience', 
       image: 'https://picsum.photos/400/300?random=5'
     },
     { 
-      name: 'Restaurant Website', 
+      name: 'Gourmet Dining Experience', 
       image: 'https://picsum.photos/400/300?random=6'
     },
     { 
-      name: 'Fitness Studio Platform', 
+      name: 'Premium Fitness Ecosystem', 
       image: 'https://picsum.photos/400/300?random=7'
     },
     { 
-      name: 'Real Estate Portal', 
+      name: 'Luxury Real Estate Platform', 
       image: 'https://picsum.photos/400/300?random=8'
     }
   ];
@@ -129,31 +140,31 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   processes = [
     {
       title: 'Product Requirements',
-      description: 'We start every project by gathering and clarifying your product requirements. This ensures we build exactly what you need.',
+      description: 'We dive deep into your vision, uncovering not just what you want, but what you truly need. Through strategic discovery sessions, we transform your ideas into a crystal-clear roadmap—ensuring every feature, every interaction, every detail serves your ultimate goals.',
       icon: '📋'
     },
     {
       title: '2-Week Sprint',
-      description: 'Our development runs in focused 2-week sprints. Each sprint starts with planning and ends with a demo — so you see real progress, fast.',
+      description: 'Velocity meets precision. Our laser-focused 2-week sprints deliver tangible results at breakneck speed. Each sprint begins with strategic planning and culminates in a powerful demo—you\'ll witness your vision come to life, iteration by iteration, faster than you ever imagined.',
       icon: '⚡'
     },
     {
       title: 'Weekly Reports',
-      description: 'We keep you in the loop with clear, concise weekly updates. You\'ll always know what\'s been done, what\'s in progress, and what\'s coming next.',
+      description: 'Transparency is our superpower. Every week, you receive comprehensive updates that paint a vivid picture of progress. No surprises, no mysteries—just crystal-clear insights into what\'s been accomplished, what\'s in motion, and what exciting developments await.',
       icon: '📊'
     },
     {
       title: 'Communication',
-      description: 'We stay connected through regular check-ins and instant messaging. You\'ll always have a direct line to our team — no long waits, no guesswork.',
+      description: 'We\'re not just your developers—we\'re your partners. Through real-time messaging and regular strategic check-ins, you\'ll have instant access to our team. No waiting, no wondering, no guesswork. Just seamless collaboration that keeps your project moving forward, always.',
       icon: '💬'
     }
   ];
 
   stats = [
-    { value: '60+', label: 'Projects launched', icon: '🚀' },
-    { value: '2-3', label: 'Months to launch', icon: '📅' },
-    { value: '30+', label: 'People in the team', icon: '👥' },
-    { value: '€15000', label: 'Minimum project price', icon: '€' }
+    { value: '60+', label: 'Success Stories Delivered', icon: '🚀' },
+    { value: '2-3', label: 'Months to Market Domination', icon: '📅' },
+    { value: '30+', label: 'Elite Specialists at Your Service', icon: '👥' },
+    { value: '€15000', label: 'Investment in Excellence', icon: '€' }
   ];
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -179,6 +190,19 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       processesSection.style.setProperty('--processes-count', String(this.processes.length));
     }
     
+    // Recalculate positions after a longer delay to ensure DOM is fully settled
+    setTimeout(() => {
+      this.calculateScrollPositions();
+    }, 500);
+    
+    // Add resize listener to recalculate positions
+    this.resizeHandler = () => {
+      setTimeout(() => {
+        this.calculateScrollPositions();
+      }, 100);
+    };
+    window.addEventListener('resize', this.resizeHandler);
+    
     this.setupScrollListeners();
     // Initial navbar position at bottom
     this.updateNavbarPosition(0);
@@ -187,6 +211,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     if (this.scrollHandler) {
       window.removeEventListener('scroll', this.scrollHandler);
+    }
+    if (this.resizeHandler) {
+      window.removeEventListener('resize', this.resizeHandler);
     }
   }
 
@@ -322,14 +349,26 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const viewportHeight = window.innerHeight;
 
+    // Use cached positions, but recalculate about section position dynamically
+    // since it might have shifted due to layout changes
+    // About section is not fixed, so we can always get its accurate position
     const servicesTop = this.servicesSectionTop;
-    const aboutTop = this.aboutSectionTop;
+    const aboutRect = aboutSection.getBoundingClientRect();
+    const aboutTop = aboutRect.top + (window.pageYOffset || document.documentElement.scrollTop);
+    // Update cached value for consistency
+    this.aboutSectionTop = aboutTop;
 
     if (!servicesTop || !aboutTop) return;
 
     // Absolute scroll ranges
     const pinStart = servicesTop;                 // when services reach viewport top
-    const pinEnd = aboutTop - viewportHeight;      // when about top hits viewport bottom
+    // Use servicesFixedEnd to ensure all services are shown
+    // Recalculate if not set (fallback)
+    const scrollPerService = viewportHeight;
+    const calculatedPinEnd = this.servicesFixedEnd || (servicesTop + (this.services.length * scrollPerService));
+    const maxPinEnd = aboutTop - viewportHeight;    // Don't overlap with about section
+    // Use calculatedPinEnd to show all services, but don't exceed about section start
+    const pinEnd = Math.min(calculatedPinEnd, maxPinEnd);
     const transitionEnd = aboutTop;                // when about top hits viewport top
 
     const rect = servicesSection.getBoundingClientRect();
@@ -599,8 +638,20 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const viewportHeight = window.innerHeight;
 
-    const processesTop = this.processesSectionTop;
-    const statsTop = this.statsScrollStart;
+    // Recalculate processes section position dynamically
+    // This ensures accurate positioning even after content changes (like text updates)
+    const processesRect = processesSection.getBoundingClientRect();
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const processesTop = processesRect.top + scrollTop;
+    // Update cached value for consistency
+    this.processesSectionTop = processesTop;
+
+    // Recalculate stats section position dynamically
+    // since it might have shifted due to layout changes
+    const statsRect = statsSection.getBoundingClientRect();
+    const statsTop = statsRect.top + scrollTop;
+    // Update cached value for consistency
+    this.statsScrollStart = statsTop;
 
     if (!processesTop || !statsTop) return;
 

@@ -1,5 +1,8 @@
 <!-- Main App Layout -->
 <div class="app-container">
+  <!-- Global Cursor Glow -->
+  <div class="global-cursor-glow" [style.left.%]="cursorX" [style.top.%]="cursorY"></div>
+  
   <main class="main-content">
     <router-outlet />
 </main>

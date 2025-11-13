@@ -46,7 +46,7 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.125rem;
   font-weight: 700;
   font-size: 1.25rem;
   color: var(--color-white);
@@ -62,7 +62,7 @@
   }
   
   .logo-text {
-    margin-left: 0.5rem;
+    margin-left: 0;
   }
 }
 
@@ -331,24 +331,57 @@
   align-items: flex-start; // Start content at top so it scrolls up naturally
   justify-content: center;
   padding-top: 6rem; // Keep top padding
+  background: var(--color-primary); // Full section background
+  overflow: hidden; // Contain cursor glow
   
   // Add extra height to allow scrolling through all services
   // Each service needs approximately viewport height to scroll through
   // Always have this height so scroll space is available
   min-height: calc(100vh * var(--services-count, 4));
   
+  // Full-width background overlay for gradients
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(
+        circle at 30% 20%,
+        rgba(0, 217, 255, 0.15) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 70% 80%,
+        rgba(138, 43, 226, 0.1) 0%,
+        transparent 50%
+      );
+    opacity: 0.6;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  // Additional gradient overlay
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+      linear-gradient(225deg, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  // When fixed, ensure full viewport coverage
+  &.services-fixed {
+    position: relative; // Keep relative, content will be fixed
+  }
+  
   @media (max-width: 768px) {
     padding: 4rem 1.5rem 2rem;
     padding-top: 4rem;
     min-height: calc(100vh * var(--services-count, 4));
   }
-}
-
-.services-background {
-  position: absolute;
-  inset: 0;
-  background: var(--color-primary);
-  z-index: 0;
 }
 
 .services-content {
@@ -359,6 +392,7 @@
   transition: transform 0.1s linear;
   margin-top: 0; // Ensure it starts at the top of section
   will-change: transform;
+  
   
   // When scrolling up, disable position transition to prevent jump
   &.scrolling-up {
@@ -380,12 +414,13 @@
     align-items: center;
     justify-content: flex-start; // Keep header at top, don't center vertically
     min-height: 100vh;
-    background: var(--color-primary);
     margin-top: 0;
     padding-top: 6rem; // Keep consistent top padding
     padding-bottom: 2rem; // Reduced bottom padding to prevent overlap
+    background: transparent; // Transparent - section background shows through
     // Transform is applied via inline style for smooth push-up transition
     // No transition on position to prevent jump when scrolling up
+    // Background gradients are on the section, not content
     
     &.scrolling-up {
       transition: transform 0.1s linear;
@@ -399,6 +434,18 @@
   }
 }
 
+
+.services-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(135deg, rgba(0, 217, 255, 0.05) 0%, transparent 50%),
+    linear-gradient(225deg, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+
 .section-title {
   font-size: 5rem;
   font-weight: 900;
@@ -406,6 +453,8 @@
   text-align: center;
   margin-bottom: 4rem;
   letter-spacing: -2px;
+  position: relative;
+  z-index: 2; // Above background
   
   @media (max-width: 968px) {
     font-size: 3.5rem;
@@ -424,6 +473,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2; // Above background
   
   @media (max-width: 768px) {
     min-height: 300px;
@@ -1227,7 +1277,7 @@
   
 .processes-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 5rem;
   
   p {
     max-width: 800px;
@@ -1243,7 +1293,7 @@
   min-height: 500px;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   
   @media (max-width: 768px) {
@@ -1256,9 +1306,10 @@
   width: 100%;
   max-width: 1000px;
   left: 50%; // Center horizontally
+  top: 0; // Reset to default position
   transform: translateX(-50%) translateY(50px); // Always centered, start with offset
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto 1fr;
   gap: 3rem;
   align-items: center;
   padding: 2rem;

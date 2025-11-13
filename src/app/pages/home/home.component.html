@@ -4,18 +4,18 @@
   <nav class="navbar" [class.navbar-fixed]="isNavbarFixed" [style.transform]="navbarTransform">
     <div class="navbar-content">
       <div class="logo">
-        <span class="logo-x">S</span>
-        <span class="logo-text">PIDERS</span>
+        <span class="logo-x">I</span>
+        <span class="logo-text">NTRINSIC SPIDERS</span>
       </div>
       <div class="nav-links">
         <a href="#services" (click)="scrollToSection('services', $event)">Services</a>
-        <a href="#about" (click)="scrollToSection('about', $event)">About</a>
+        <a href="#about" (click)="scrollToSection('about', $event)">Who We Are</a>
         <a href="#portfolio" (click)="scrollToSection('portfolio', $event)">Portfolio</a>
         <a href="#processes" (click)="scrollToSection('processes', $event)">Processes</a>
-        <a href="#stats" (click)="scrollToSection('stats', $event)">Stats</a>
+        <a href="#stats" (click)="scrollToSection('stats', $event)">Impact</a>
       </div>
       <a routerLink="/contact" class="contact-btn">
-        Contact us
+        Let's Create Magic
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -32,14 +32,15 @@
     <div class="hero-content">
       <div class="hero-text-left">
         <h1 class="hero-title">
-          <span class="title-line-1">Web Design & Development</span>
-          <span class="title-line-2">for Modern Businesses</span>
+          <span class="title-line-1">Where Digital Dreams</span>
+          <span class="title-line-2">Become Reality</span>
       </h1>
       </div>
       <div class="hero-text-right">
         <p class="hero-description">
-          Professional web development services. From responsive websites to full-stack applications. 
-          We create digital experiences that drive results and elevate your online presence.
+          We don't just build websites—we craft extraordinary digital experiences that captivate audiences, 
+          convert visitors, and catapult your business into the future. Every pixel, every interaction, 
+          every moment designed to make your vision unforgettable.
         </p>
       </div>
     </div>
@@ -51,9 +52,8 @@
 
   <!-- Services Section -->
   <section class="services-section" id="services" [class.services-fixed]="isServicesFixed">
-    <div class="services-background"></div>
     <div class="services-content" [class.fixed-content]="isServicesFixed" [class.scrolling-up]="isScrollingUpServices" [style.transform]="servicesContentTransform">
-      <h2 class="section-title">SERVICES</h2>
+        <h2 class="section-title">SERVICES</h2>
       <div class="services-display">
         <div class="service-item" *ngFor="let service of services; let i = index" 
              [class.active]="i === currentServiceIndex">
@@ -112,14 +112,15 @@
       <div class="about-main">
         <div class="about-text-wrapper">
           <p class="about-intro">
-            In nature, spiders craft intricate webs—delicate yet strong, beautiful yet functional. 
-            Each thread is placed with purpose, creating a masterpiece that serves both art and function.
+            In nature, spiders craft intricate webs—delicate yet unbreakable, breathtaking yet purposeful. 
+            Every thread is woven with intention, every connection designed to capture what matters most. 
+            This is our philosophy: beauty and function, art and engineering, woven into one extraordinary experience.
           </p>
           
           <div class="about-spiders">
             <div class="spider-count">
               <span class="number">2</span>
-              <span class="label">Spiders</span>
+              <span class="label">Intrinsic Spiders</span>
             </div>
             <div class="limbs-count">
               <span class="number">16</span>
@@ -132,16 +133,18 @@
           </div>
           
           <p class="about-philosophy">
-            We are Spiders. Just as two spiders work together, weaving their webs with precision and care, 
-            we craft digital experiences that connect, engage, and transform. With sixteen limbs between us— 
-            design, development, strategy, creativity, innovation, passion, dedication, and excellence— 
-            we build everything your vision needs to thrive in the digital world.
+            We are Intrinsic Spiders. Two visionaries working in perfect harmony, weaving digital masterpieces 
+            with surgical precision and boundless creativity. With sixteen limbs between us—design mastery, 
+            development excellence, strategic thinking, creative innovation, technical prowess, unwavering passion, 
+            relentless dedication, and uncompromising quality—we possess everything needed to transform your boldest 
+            ideas into digital reality.
           </p>
           
           <p class="about-mission">
-            Every website we create is a web of possibilities—interconnected, resilient, and designed to catch 
-            opportunities. We don't just build websites; we weave digital dreams into reality, thread by thread, 
-            pixel by pixel, until your vision becomes a masterpiece that stands the test of time.
+            Every website we create is a web of infinite possibilities—seamlessly interconnected, beautifully resilient, 
+            and strategically designed to capture opportunities that others miss. We don't just build websites; 
+            we architect digital ecosystems that breathe, evolve, and thrive. Thread by thread, pixel by pixel, 
+            we weave your vision into a masterpiece that doesn't just stand the test of time—it defines it.
           </p>
         </div>
       </div>
@@ -193,15 +196,16 @@
       <div class="processes-header">
         <h2 class="section-title">PROCESSES & MANAGEMENT</h2>
         <p class="processes-intro">
-          Our process turns vision into results. With clear planning and transparent communication, 
-          we manage every step to deliver exactly what your product needs to succeed.
+          Vision without execution is just a dream. Our meticulously crafted process transforms your boldest 
+          ideas into tangible results. Through strategic planning, crystal-clear communication, and relentless 
+          attention to detail, we orchestrate every moment of your journey from concept to launch—ensuring 
+          your product doesn't just succeed, it dominates.
         </p>
     </div>
       <div class="processes-list">
         <div class="process-item" 
              *ngFor="let process of processes; let i = index"
              [class.active]="i === currentProcessIndex">
-          <div class="process-number">[{{ formatProcessNumber(i + 1) }}]</div>
           <div class="process-icon">
             <div class="icon-3d" [innerHTML]="process.icon"></div>
           </div>
@@ -218,7 +222,7 @@
   <section class="stats-section" id="stats">
     <div class="stats-background"></div>
     <div class="stats-content">
-      <h2 class="stats-title">SPIDERS IN THE NUMBERS</h2>
+      <h2 class="stats-title">INTRINSIC SPIDERS IN THE NUMBERS</h2>
       <div class="stats-grid">
         <div class="stat-card" *ngFor="let stat of stats">
           <div class="stat-icon">
@@ -229,15 +233,10 @@
         </div>
       </div>
       <p class="stats-description">
-        We simplify the complex. Modern frameworks and tools. High-end design. 
-        Scalable digital experiences that deliver results — in the numbers.
+        Behind every number lies a story of transformation. We master the complex, embrace cutting-edge innovation, 
+        and deliver world-class design that doesn't just look stunning—it performs flawlessly. Every project is 
+        a testament to our commitment: scalable, powerful, and purpose-built to exceed expectations.
       </p>
-      <a routerLink="/contact" class="contact-btn-large">
-        Contact us
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
     </div>
   </section>
 
@@ -248,12 +247,14 @@
       <div class="cta-blob blob-2"></div>
     </div>
     <div class="cta-content">
-      <h2 class="cta-title">Let's do projects together!</h2>
+      <h2 class="cta-title">Ready to Transform Your Digital Presence?</h2>
       <p class="cta-description">
-        Share your goals with us — and let's create something that makes an impact
+        Your vision deserves more than ordinary. Let's collaborate to create something extraordinary—something 
+        that doesn't just make an impact, but redefines what's possible. The future of your business starts 
+        with a single conversation.
       </p>
       <a routerLink="/contact" class="contact-btn-large">
-        Contact us
+        Start Your Journey
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>

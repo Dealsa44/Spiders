@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build -- --configuration=production",
-  "outputDirectory": "dist/website",
+  "outputDirectory": "dist/website/browser",
   "rewrites": [
     {
       "source": "/(.*)",

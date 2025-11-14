@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ContactService } from '../../../core/services/contact.service';
 
 @Component({
   selector: 'app-contact',
@@ -40,6 +41,8 @@ export class ContactComponent implements AfterViewInit {
   
   // Mock booked slots (in real app, this would come from backend)
   bookedSlots: Set<string> = new Set();
+
+  constructor(private contactService: ContactService) {}
 
   // Hardcoded text
   private texts: { [key: string]: string } = {
@@ -110,41 +113,64 @@ export class ContactComponent implements AfterViewInit {
     // Check if booking is selected
     const hasBooking = this.selectedDate && this.selectedTimeSlot;
     
-    // Simulate form submission (frontend only)
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.submitSuccess = true;
-      
-      // Show appropriate success message
-      if (hasBooking) {
-        this.submitMessage = this.getText('bookingSuccessMessage');
+    // Prepare form data
+    const formData = {
+      name: this.contactForm.name,
+      email: this.contactForm.email,
+      phone: this.contactForm.phone,
+      message: this.contactForm.message,
+      selectedDate: this.selectedDate,
+      selectedTimeSlot: this.selectedTimeSlot
+    };
+    
+    // Submit to backend
+    this.contactService.submitContactForm(formData).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        this.submitSuccess = true;
         
-        // Mark slot as booked
-        if (this.selectedDate) {
-          const dateKey = this.getDateKey(this.selectedDate);
-          this.bookedSlots.add(`${dateKey}-${this.selectedTimeSlot}`);
+        // Show appropriate success message
+        if (hasBooking) {
+          this.submitMessage = this.getText('bookingSuccessMessage');
+          
+          // Mark slot as booked
+          if (this.selectedDate) {
+            const dateKey = this.getDateKey(this.selectedDate);
+            this.bookedSlots.add(`${dateKey}-${this.selectedTimeSlot}`);
+          }
+          
+          // Reset booking selection
+          this.selectedDate = null;
+          this.selectedTimeSlot = null;
+        } else {
+          this.submitMessage = this.getText('successMessage');
         }
         
-        // Reset booking selection
-        this.selectedDate = null;
-        this.selectedTimeSlot = null;
-      } else {
-        this.submitMessage = this.getText('successMessage');
+        // Reset form
+        this.contactForm = {
+          name: '',
+          email: '',
+          phone: '',
+          message: ''
+        };
+        
+        // Clear message after 5 seconds
+        setTimeout(() => {
+          this.submitMessage = '';
+        }, 5000);
+      },
+      error: (error) => {
+        console.error('Error submitting form:', error);
+        this.isSubmitting = false;
+        this.submitSuccess = false;
+        this.submitMessage = this.getText('errorMessage');
+        
+        // Clear error message after 5 seconds
+        setTimeout(() => {
+          this.submitMessage = '';
+        }, 5000);
       }
-      
-      // Reset form
-      this.contactForm = {
-        name: '',
-        email: '',
-        phone: '',
-        message: ''
-      };
-      
-      // Clear message after 5 seconds
-      setTimeout(() => {
-        this.submitMessage = '';
-      }, 5000);
-    }, 1500);
+    });
   }
 
   private setupScrollAnimations(): void {

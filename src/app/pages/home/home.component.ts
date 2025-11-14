@@ -167,6 +167,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     { value: '€15000', label: 'Investment in Excellence', icon: '€' }
   ];
 
+  techStack = [
+    { name: 'WordPress', logo: '/svgs/wordpress.svg' },
+    { name: 'ReactJS', logo: '/svgs/reactjs.svg' },
+    { name: 'Python', logo: '/svgs/python.svg' },
+    { name: 'Angular', logo: '/svgs/angular.svg' },
+    { name: 'Canvas', logo: '/svgs/canvas.svg' },
+    { name: 'Node.js', logo: '/svgs/nodejs.svg' },
+    { name: 'PostgreSQL', logo: '/svgs/postgresql.svg' }
+  ];
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
@@ -764,6 +774,13 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       this.processesContentTransform = `translateY(${translateY}px)`;
       this.currentProcessIndex = this.processes.length - 1; // keep last process while pushing
     }
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   scrollToSection(sectionId: string, event: Event): void {

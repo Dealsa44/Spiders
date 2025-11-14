@@ -29,50 +29,112 @@
         <h2>{{ getText('formTitle') }}</h2>
       </div>
       <form (ngSubmit)="onSubmit()" #contactFormRef="ngForm">
-        <div class="form-group">
-          <label>{{ getText('nameLabel') }}</label>
-          <input
-            type="text"
-            [(ngModel)]="contactForm.name"
-            [placeholder]="getText('namePlaceholder')"
-            name="name"
-            #nameInput="ngModel"
-            required
-          />
-        </div>
+        <div class="form-content-grid">
+          <!-- Left Column: Form Fields -->
+          <div class="form-fields-column">
+            <div class="form-group">
+              <label>{{ getText('nameLabel') }}</label>
+              <input
+                type="text"
+                [(ngModel)]="contactForm.name"
+                [placeholder]="getText('namePlaceholder')"
+                name="name"
+                #nameInput="ngModel"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <label>{{ getText('emailLabel') }}</label>
-          <input
-            type="email"
-            [(ngModel)]="contactForm.email"
-            [placeholder]="getText('emailPlaceholder')"
-            name="email"
-            #emailInput="ngModel"
-            required
-          />
-        </div>
+            <div class="form-group">
+              <label>{{ getText('emailLabel') }}</label>
+              <input
+                type="email"
+                [(ngModel)]="contactForm.email"
+                [placeholder]="getText('emailPlaceholder')"
+                name="email"
+                #emailInput="ngModel"
+                required
+              />
+            </div>
 
-        <div class="form-group">
-          <label>{{ getText('phoneLabel') }}</label>
-          <input
-            type="tel"
-            [(ngModel)]="contactForm.phone"
-            [placeholder]="getText('phonePlaceholder')"
-            name="phone"
-          />
-        </div>
+            <div class="form-group">
+              <label>{{ getText('phoneLabel') }}</label>
+              <input
+                type="tel"
+                [(ngModel)]="contactForm.phone"
+                [placeholder]="getText('phonePlaceholder')"
+                name="phone"
+              />
+            </div>
 
-        <div class="form-group">
-          <label>{{ getText('messageLabel') }}</label>
-          <textarea
-            [(ngModel)]="contactForm.message"
-            [placeholder]="getText('messagePlaceholder')"
-            name="message"
-            #messageInput="ngModel"
-            rows="6"
-            required
-          ></textarea>
+            <div class="form-group">
+              <label>{{ getText('messageLabel') }}</label>
+              <textarea
+                [(ngModel)]="contactForm.message"
+                [placeholder]="getText('messagePlaceholder')"
+                name="message"
+                #messageInput="ngModel"
+                rows="6"
+                required
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Right Column: Booking Calendar -->
+          <div class="booking-column">
+            <!-- Calendar -->
+            <div class="calendar-container">
+              <div class="calendar-header">
+                <button class="calendar-nav-btn" [class.disabled]="!canGoToPreviousMonth()" [disabled]="!canGoToPreviousMonth()" (click)="previousMonth()" type="button">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <h3 class="calendar-month-year">{{ getCurrentMonthYear() }}</h3>
+                <button class="calendar-nav-btn" (click)="nextMonth()" type="button">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="calendar-weekdays">
+                <div class="weekday" *ngFor="let day of weekDays">{{ day }}</div>
+              </div>
+
+              <div class="calendar-days">
+                <div 
+                  *ngFor="let day of calendarDays" 
+                  class="calendar-day"
+                  [class.other-month]="day.otherMonth"
+                  [class.selected]="isSelectedDate(day.date)"
+                  [class.today]="isToday(day.date)"
+                  [class.disabled]="isDateDisabled(day.date) || day.otherMonth"
+                  (click)="selectDate(day.date, day.otherMonth)"
+                >
+                  <span>{{ day.day }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Time Slots -->
+            <div class="time-slots-container" *ngIf="selectedDate">
+              <h3 class="time-slots-title">{{ getText('selectTime') }}</h3>
+              <div class="time-slots-grid">
+                <button
+                  *ngFor="let slot of availableTimeSlots"
+                  class="time-slot"
+                  [class.selected]="selectedTimeSlot === slot"
+                  [class.booked]="isSlotBooked(slot)"
+                  [disabled]="isSlotBooked(slot)"
+                  (click)="selectTimeSlot(slot)"
+                  type="button"
+                >
+                  {{ slot }}
+                </button>
+              </div>
+              <p *ngIf="availableTimeSlots.length === 0" class="no-slots">{{ getText('noSlotsAvailable') }}</p>
+            </div>
+          </div>
         </div>
 
         <div class="form-actions">
@@ -95,7 +157,7 @@
       
       <div class="info-items">
         <div class="info-item">
-          <div class="info-icon-small">🏢</div>
+          <div class="info-icon-small">🌐</div>
           <div class="info-content">
             <h4>{{ getText('addressLabel') }}</h4>
             <p>{{ getText('addressValue') }}</p>
@@ -104,10 +166,12 @@
         </div>
 
         <div class="info-item">
-          <div class="info-icon-small">📞</div>
+          <div class="info-icon-small">
+            <img src="/svgs/whats-app.svg" alt="WhatsApp" class="whatsapp-icon" />
+          </div>
           <div class="info-content">
             <h4>{{ getText('phone') }}</h4>
-            <p><a [href]="'tel:' + getText('phoneValue')">{{ getText('phoneValue') }}</a></p>
+            <p><a [href]="getWhatsAppUrl()" target="_blank" rel="noopener noreferrer">{{ getText('phoneValue') }}</a></p>
           </div>
         </div>
 

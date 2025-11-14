@@ -787,12 +787,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     event.preventDefault();
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 80; // Account for fixed navbar
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
+      // Get the element's bounding rect and current scroll position
+      const elementRect = element.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      // Calculate the absolute position of the element's top edge in the document
+      const elementTop = elementRect.top + scrollTop;
+      
+      // Scroll to align the section's top edge with the viewport top (no offset, no space)
       window.scrollTo({
-        top: offsetPosition,
+        top: elementTop,
         behavior: 'smooth'
       });
     }

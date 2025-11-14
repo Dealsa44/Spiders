@@ -456,6 +456,7 @@
   padding-top: 6rem; // Keep top padding
   background: var(--color-primary); // Full section background
   overflow: hidden; // Contain cursor glow
+  scroll-margin-top: 0; // No offset - align section at top edge
   
   // Add extra height to allow scrolling through all services
   // Each service needs approximately viewport height to scroll through
@@ -800,6 +801,7 @@
   background: var(--color-primary);
   overflow: hidden;
   z-index: 10; // Ensure it's above services fixed content when scrolling
+  scroll-margin-top: 0; // No offset - align section at top edge
   
   @media (max-width: 768px) {
     padding: 6rem 1.5rem 4rem;
@@ -1200,6 +1202,7 @@
   justify-content: center;
   padding-top: 8rem; // Keep top padding
   background: var(--color-primary);
+  scroll-margin-top: 0; // No offset - align section at top edge
   
   @media (max-width: 768px) {
     padding: 6rem 1.5rem 2rem;
@@ -1436,6 +1439,7 @@
   align-items: flex-start; // Start content at top so it scrolls up naturally
   justify-content: center;
   padding-top: 6rem; // Keep top padding
+  scroll-margin-top: 0; // No offset - align section at top edge
   
   // Add extra height to allow scrolling through all processes
   // Each process needs approximately viewport height to scroll through
@@ -1625,6 +1629,7 @@
   position: relative;
   padding: 8rem 3rem 6rem; // Increased top padding to account for fixed section above
   background: var(--color-primary);
+  scroll-margin-top: 0; // No offset - align section at top edge
   
   @media (max-width: 768px) {
     padding: 6rem 1.5rem 4rem;
